@@ -38,7 +38,7 @@ public class Board {
     }
 
     /**
-     * Builder for {@link Board}
+     * Builder for {@link Board}.
      */
     public static final class BoardBuilder {
         private int size;

@@ -8,6 +8,7 @@ import hu.nye.progtech.wumpus.board.Board;
 import hu.nye.progtech.wumpus.board.BoardParser;
 import hu.nye.progtech.wumpus.board.BoardRaw;
 import hu.nye.progtech.wumpus.board.BufferedBoardReader;
+import hu.nye.progtech.wumpus.exception.BoardParsingException;
 
 /**
  *  NYE Progtech Assigment - Wumplusz Refactored.
@@ -16,7 +17,7 @@ public class Main {
     /**
      * Application entry point.
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws BoardParsingException {
         InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("wumpuszinput.txt");
         BoardRaw boardRaw = null;
         try {
