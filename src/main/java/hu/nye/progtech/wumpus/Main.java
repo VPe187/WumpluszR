@@ -31,5 +31,6 @@ public class Main {
         assert boardRaw != null;
         BoardParser boardParser = new BoardParser(boardRaw);
         Board gameBoard = boardParser.parseRawBoard();
+        System.out.println(gameBoard.getSize() + " " + gameBoard.getStartCol() + " " + gameBoard.getStartRow());
     }
 }

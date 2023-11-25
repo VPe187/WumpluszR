@@ -1,10 +1,12 @@
 package hu.nye.progtech.wumpus.board;
 
+import java.util.Arrays;
+
 /**
  * Parse raw board data and generate {@link Board}.
  */
 public class BoardParser {
-    BoardRaw boardRaw;
+    final BoardRaw boardRaw;
     Board board;
 
     /**
@@ -28,10 +30,14 @@ public class BoardParser {
     }
 
     private void parseFirstRow() {
-        System.out.println(this.boardRaw.getFirstRow());
+        String[] row = boardRaw.getFirstRow().split(" ");
+        int boardSize = Integer.parseInt(row[0]);
+        int startCol = 1; // B
+        int startRow = Integer.parseInt(row[2]);
+        board = Board.builder().withSize(boardSize).withStartCol(startCol).withStartRow(startRow).build();
     }
 
     private void parseRemainingRows() {
-        System.out.println(boardRaw.getRemainingRows());
+        //System.out.println(boardRaw.getRemainingRows());
     }
 }
