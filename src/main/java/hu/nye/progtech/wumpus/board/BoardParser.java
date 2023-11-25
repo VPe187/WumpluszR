@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 import hu.nye.progtech.wumpus.BoardUtil;
 import hu.nye.progtech.wumpus.exception.BoardParsingException;
 import hu.nye.progtech.wumpus.model.Cell;
+import hu.nye.progtech.wumpus.model.CellHero;
 import hu.nye.progtech.wumpus.model.CellType;
 import hu.nye.progtech.wumpus.model.Direction;
 
@@ -42,7 +43,7 @@ public class BoardParser {
     public Board parseRawBoard() throws BoardParsingException {
         parseFirstRow();
         parseRemainingRows();
-        return Board.builder().withSize(boardSize).withStartCol(startCol).withStartRow(startRow).build();
+        return Board.builder().withCells(cells).withSize(boardSize).withStartCol(startCol).withStartRow(startRow).build();
     }
 
     private void parseFirstRow() throws BoardParsingException {
@@ -80,13 +81,12 @@ public class BoardParser {
                 throw new BoardParsingException("Row contains invalid character!");
             } else {
                 for (int j = 0; j < row.length(); j++) {
-                    cells[j][i] = new Cell(CellType.getByValue(row.split("")[j]));
+                    cells[j][i] = Cell.builder().withType(CellType.getByValue(row.split("")[j])).build();
                 }
             }
             i++;
         }
-        cells[startCol - 1][startRow - 1] = new Cell(CellType.HERO);
+        cells[startCol - 1][startRow - 1] = Cell.builder().buildHero();
         return cells;
-
     }
 }

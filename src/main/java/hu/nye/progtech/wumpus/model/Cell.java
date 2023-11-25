@@ -1,5 +1,6 @@
 package hu.nye.progtech.wumpus.model;
 
+import hu.nye.progtech.wumpus.BoardUtil;
 import hu.nye.progtech.wumpus.board.Board;
 
 /**
@@ -44,6 +45,10 @@ public class Cell {
 
         public Cell build() {
             return new Cell(type);
+        }
+
+        public Cell buildHero() {
+            return new CellHero();
         }
     }
 }
