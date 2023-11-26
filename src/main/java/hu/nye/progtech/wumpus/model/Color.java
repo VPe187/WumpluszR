@@ -1,4 +1,4 @@
-package hu.nye.progtech.wumpus.ui;
+package hu.nye.progtech.wumpus.model;
 
 /**
  * This enum class contains board item colors.

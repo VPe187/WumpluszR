@@ -2,16 +2,13 @@ package hu.nye.progtech.wumpus.ui;
 
 import hu.nye.progtech.wumpus.board.Board;
 import hu.nye.progtech.wumpus.model.Cell;
+import hu.nye.progtech.wumpus.model.Color;
 import hu.nye.progtech.wumpus.model.DrawType;
 
 /**
  * This class render {@link Board} to console.
  */
-public class RendererConsole {
-    public RendererConsole() {
-
-    }
-
+public class ConsolRenderer {
     /**
      * This is a render method.
      *
@@ -20,20 +17,31 @@ public class RendererConsole {
     public static void renderBoard(Board board) {
         Cell[][] cells = board.getCells();
         int boardSize = board.getSize();
-        for (int i = 0; i <= boardSize; i++) {
-            if (i == 0) {
-                tpyeFirstRow(boardSize);
-            } else if (i == boardSize) {
-                tpyeInternalRow(boardSize, cells, i);
+        typeFirstRow(boardSize);
+        for (int i = 0; i < boardSize; i++) {
+            typeInternalRow(boardSize, cells, i);
+            if (i == boardSize - 1) {
                 tpyeLastRow(boardSize);
             } else {
-                tpyeInternalRow(boardSize, cells, i);
-                typeRow(boardSize);
+                typeSeparatorRow(boardSize);
             }
         }
+
     }
 
-    private static void tpyeFirstRow(int boardSize) {
+    /**
+     * Render a cell.
+     *
+     * @param cell as {@link Cell}
+     */
+    public static void typeCell(Cell cell) {
+        echo(DrawType.Space);
+        echoCell(cell);
+        echo(DrawType.Space);
+        echo(DrawType.Vertical);
+    }
+
+    private static void typeFirstRow(int boardSize) {
         echo(DrawType.LeftUp);
         for (int i = 1; i < boardSize; i++) {
             echo(DrawType.Horizontal);
@@ -48,7 +56,7 @@ public class RendererConsole {
         echoLF();
     }
 
-    private static void typeRow(int boardSize) {
+    private static void typeSeparatorRow(int boardSize) {
         echo(DrawType.VerticalLeft);
         for (int i = 1; i < boardSize; i++) {
             echo(DrawType.Horizontal);
@@ -63,18 +71,11 @@ public class RendererConsole {
         echoLF();
     }
 
-    private static void tpyeInternalRow(int boardSize, Cell[][] cells, int row) {
+    private static void typeInternalRow(int boardSize, Cell[][] cells, int row) {
         echo(DrawType.Vertical);
-        for (int i = 0; i < boardSize - 1; i++) {
-            echo(DrawType.Space);
-            echoCell(cells[i][row - 1]);
-            echo(DrawType.Space);
-            echo(DrawType.Vertical);
+        for (int i = 0; i < boardSize; i++) {
+            typeCell(cells[i][row]);
         }
-        echo(DrawType.Space);
-        echoCell(cells[boardSize - 1][row - 1]);
-        echo(DrawType.Space);
-        echo(DrawType.Vertical);
         echoLF();
     }
 
@@ -108,5 +109,4 @@ public class RendererConsole {
     private static void echoLF() {
         System.out.println();
     }
-
 }

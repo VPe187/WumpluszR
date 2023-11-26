@@ -9,7 +9,7 @@ import hu.nye.progtech.wumpus.board.BoardParser;
 import hu.nye.progtech.wumpus.board.BoardRaw;
 import hu.nye.progtech.wumpus.board.BufferedBoardReader;
 import hu.nye.progtech.wumpus.exception.BoardParsingException;
-import hu.nye.progtech.wumpus.ui.RendererConsole;
+import hu.nye.progtech.wumpus.ui.ConsolRenderer;
 
 /**
  *  NYE Progtech Assigment - Wumplusz Refactored.
@@ -33,7 +33,6 @@ public class Main {
         assert boardRaw != null;
         BoardParser boardParser = new BoardParser(boardRaw);
         Board gameBoard = boardParser.parseRawBoard();
-        //System.out.println(gameBoard);
-        RendererConsole.renderBoard(gameBoard);
+        ConsolRenderer.renderBoard(gameBoard);
     }
 }

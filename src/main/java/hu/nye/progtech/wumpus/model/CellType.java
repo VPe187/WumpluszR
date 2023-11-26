@@ -1,7 +1,5 @@
 package hu.nye.progtech.wumpus.model;
 
-import hu.nye.progtech.wumpus.ui.Color;
-
 /**
  * Cell types enum.
  */

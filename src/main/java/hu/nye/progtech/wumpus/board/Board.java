@@ -1,6 +1,7 @@
 package hu.nye.progtech.wumpus.board;
 
 import hu.nye.progtech.wumpus.model.Cell;
+import hu.nye.progtech.wumpus.ui.ConsolRenderer;
 
 /**
  * This class is the board of game.
