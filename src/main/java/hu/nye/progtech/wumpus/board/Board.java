@@ -2,8 +2,6 @@ package hu.nye.progtech.wumpus.board;
 
 import hu.nye.progtech.wumpus.model.Cell;
 
-import java.util.Arrays;
-
 /**
  * This class is the board of game.
  */
@@ -40,12 +38,16 @@ public class Board {
         return startRow;
     }
 
+    public Cell[][] getCells() {
+        return cells;
+    }
+
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                stringBuilder.append(cells[j][i].getCellValue());
+                stringBuilder.append(cells[j][i].getType());
             }
             stringBuilder.append(System.getProperty("line.separator"));
         }

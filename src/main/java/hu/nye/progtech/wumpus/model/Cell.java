@@ -1,8 +1,5 @@
 package hu.nye.progtech.wumpus.model;
 
-import hu.nye.progtech.wumpus.BoardUtil;
-import hu.nye.progtech.wumpus.board.Board;
-
 /**
  * This class represent one field of board.
  */
@@ -17,11 +14,7 @@ public class Cell {
         this.type = value;
     }
 
-    public CellType getCellValue() {
-        return this.type;
-    }
-
-    public CellType getValue() {
+    public CellType getType() {
         return type;
     }
 

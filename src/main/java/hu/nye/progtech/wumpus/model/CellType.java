@@ -1,18 +1,27 @@
 package hu.nye.progtech.wumpus.model;
 
+import hu.nye.progtech.wumpus.ui.Color;
+
 /**
  * Cell types enum.
  */
 public enum CellType {
-    WALL("W"), WUMPUS("U"), PIT("P"), EMPTY("_"), GOLD("G"), HERO("H");
+    WALL("W", Color.COLOR_PURPLE),
+    WUMPUS("U", Color.COLOR_RED),
+    PIT("P", Color.COLOR_BLUE),
+    EMPTY("_", Color.COLOR_BLACK),
+    GOLD("G", Color.COLOR_YELLOW),
+    HERO("H", Color.COLOR_GREEN);
     private final String sign;
+    private final Color color;
 
     /** Cell type enums.
      *
      * @param sign as String
      */
-    CellType(final String sign) {
+    CellType(final String sign, final Color color) {
         this.sign = sign;
+        this.color = color;
     }
 
     /** Cell element by value.
@@ -28,6 +37,10 @@ public enum CellType {
             }
         }
         return null;
+    }
+
+    public Color getColor() {
+        return color;
     }
 
     @Override

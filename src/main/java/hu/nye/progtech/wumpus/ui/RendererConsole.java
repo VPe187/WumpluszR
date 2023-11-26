@@ -1,70 +1,112 @@
 package hu.nye.progtech.wumpus.ui;
 
 import hu.nye.progtech.wumpus.board.Board;
+import hu.nye.progtech.wumpus.model.Cell;
+import hu.nye.progtech.wumpus.model.DrawType;
 
+/**
+ * This class render {@link Board} to console.
+ */
 public class RendererConsole {
-    private static final int asciiLeftUp = 0x250F;
-    private static final int asciiHorizontal = 0x2501;
-    private static final int asciiVertical = 0x2503;
-    private static final int asciiRightUpper = 0x2513;
-    private static final int asciiVerticalLeft = 0x2523;
-    private static final int asciiVerticalRight = 0x252B;
-    private static final int asciiLeftDown = 0x2517;
-    private static final int asciiRightDown = 0x251B;
-    private static final int asciiCrossUp = 0x2533;
-    private static final int asciiCross = 0x254B;
-    private static final int asciiCrossDown = 0x253B;
-
     public RendererConsole() {
 
     }
 
+    /**
+     * This is a render method.
+     *
+     * @param board as {@link Board}
+     */
     public static void renderBoard(Board board) {
-        for (int i = 0; i <= board.getSize(); i++) {
-            for (int j = 0; j <= board.getSize(); j++) {
-                if (i == 0) {
-                    if (j == 0) {
-                        echo(asciiLeftUp);
-                        echo(asciiHorizontal);
-                        echo(asciiHorizontal);
-                    } else if (j < board.getSize()) {
-                        echo(asciiCrossUp);
-                        echo(asciiHorizontal);
-                        echo(asciiHorizontal);
-                    } else if (j == board.getSize()) {
-                        echo(asciiRightUpper);
-                    }
-                } else if (i < board.getSize()) {
-                    if (j == 0) {
-                        echo(asciiVerticalLeft);
-                        echo(asciiHorizontal);
-                        echo(asciiHorizontal);
-                    } else if (j < board.getSize()) {
-                        echo(asciiCross);
-                        echo(asciiHorizontal);
-                        echo(asciiHorizontal);
-                    } else if (j == board.getSize()) {
-                        echo(asciiVerticalRight);
-                    }
-                } else if (i == board.getSize()) {
-                    if (j == 0) {
-                        echo(asciiLeftDown);
-                        echo(asciiHorizontal);
-                        echo(asciiHorizontal);
-                    } else if (j < board.getSize()) {
-                        echo(asciiCrossDown);
-                        echo(asciiHorizontal);
-                        echo(asciiHorizontal);
-                    } else if (j == board.getSize()) {
-                        echo(asciiRightDown);
-                    }
-                }
+        Cell[][] cells = board.getCells();
+        int boardSize = board.getSize();
+        for (int i = 0; i <= boardSize; i++) {
+            if (i == 0) {
+                tpyeFirstRow(boardSize);
+            } else if (i == boardSize) {
+                tpyeInternalRow(boardSize, cells, i);
+                tpyeLastRow(boardSize);
+            } else {
+                tpyeInternalRow(boardSize, cells, i);
+                typeRow(boardSize);
             }
-            System.out.println();
         }
     }
 
-    private static void echo (int asciiCode) {
-        System.out.print((char) asciiCode);
+    private static void tpyeFirstRow(int boardSize) {
+        echo(DrawType.LeftUp);
+        for (int i = 1; i < boardSize; i++) {
+            echo(DrawType.Horizontal);
+            echo(DrawType.Horizontal);
+            echo(DrawType.Horizontal);
+            echo(DrawType.CrossUp);
+        }
+        echo(DrawType.Horizontal);
+        echo(DrawType.Horizontal);
+        echo(DrawType.Horizontal);
+        echo(DrawType.RightUpper);
+        echoLF();
     }
+
+    private static void typeRow(int boardSize) {
+        echo(DrawType.VerticalLeft);
+        for (int i = 1; i < boardSize; i++) {
+            echo(DrawType.Horizontal);
+            echo(DrawType.Horizontal);
+            echo(DrawType.Horizontal);
+            echo(DrawType.Cross);
+        }
+        echo(DrawType.Horizontal);
+        echo(DrawType.Horizontal);
+        echo(DrawType.Horizontal);
+        echo(DrawType.VerticalRight);
+        echoLF();
+    }
+
+    private static void tpyeInternalRow(int boardSize, Cell[][] cells, int row) {
+        echo(DrawType.Vertical);
+        for (int i = 0; i < boardSize - 1; i++) {
+            echo(DrawType.Space);
+            echoCell(cells[i][row - 1]);
+            echo(DrawType.Space);
+            echo(DrawType.Vertical);
+        }
+        echo(DrawType.Space);
+        echoCell(cells[boardSize - 1][row - 1]);
+        echo(DrawType.Space);
+        echo(DrawType.Vertical);
+        echoLF();
+    }
+
+    private static void tpyeLastRow(int boardSize) {
+        echo(DrawType.LeftDown);
+        for (int i = 1; i < boardSize; i++) {
+            echo(DrawType.Horizontal);
+            echo(DrawType.Horizontal);
+            echo(DrawType.Horizontal);
+            echo(DrawType.CrossDown);
+        }
+        echo(DrawType.Horizontal);
+        echo(DrawType.Horizontal);
+        echo(DrawType.Horizontal);
+        echo(DrawType.RightDown);
+        echoLF();
+    }
+
+    private static void echo(DrawType asciiCode) {
+        System.out.print(Color.COLOR_RESET);
+        System.out.print(Color.COLOR_WHITE);
+        System.out.print(asciiCode.getValue());
+    }
+
+    private static void echoCell(Cell cell) {
+        System.out.print(Color.COLOR_RESET);
+        System.out.print(cell.getType().getColor());
+        System.out.print(cell.getType());
+    }
+
+    private static void echoLF() {
+        System.out.println();
+    }
+
 }
