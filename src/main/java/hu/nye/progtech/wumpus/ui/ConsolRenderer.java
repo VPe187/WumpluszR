@@ -1,6 +1,8 @@
 package hu.nye.progtech.wumpus.ui;
 
 import hu.nye.progtech.wumpus.board.Board;
+import hu.nye.progtech.wumpus.input.Menu;
+import hu.nye.progtech.wumpus.input.MenuItem;
 import hu.nye.progtech.wumpus.model.Cell;
 import hu.nye.progtech.wumpus.model.Color;
 import hu.nye.progtech.wumpus.model.DrawType;
@@ -39,6 +41,19 @@ public class ConsolRenderer {
         echoCell(cell);
         echo(DrawType.Space);
         echo(DrawType.Vertical);
+    }
+
+    public static void renderMenu(Menu menu) {
+        for (MenuItem menuItem: menu.getMenuList()) {
+            echoString(menuItem.getLabel(), Color.COLOR_WHITE);
+            int menuWidth = (18 + 6) - 2;
+            int labelLength = menuItem.getLabel().length();
+            for (int i = 0; i < menuWidth - labelLength; i++) {
+                echoString(".", Color.COLOR_WHITE);
+            }
+            echoString("(" + menuItem.getHotKey() + ")", Color.COLOR_YELLOW);
+            echoLF();
+        }
     }
 
     private static void typeFirstRow(int boardSize) {
@@ -109,4 +124,10 @@ public class ConsolRenderer {
     private static void echoLF() {
         System.out.println();
     }
+
+    private static void echoString(String text, Color color) {
+        System.out.print(Color.COLOR_RESET);
+        System.out.print(color);
+        System.out.print(text);
+    };
 }
