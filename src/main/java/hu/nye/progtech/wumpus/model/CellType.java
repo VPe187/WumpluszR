@@ -9,7 +9,8 @@ public enum CellType {
     PIT("P", Color.COLOR_BLUE),
     EMPTY("_", Color.COLOR_BLACK),
     GOLD("G", Color.COLOR_YELLOW),
-    HERO("H", Color.COLOR_GREEN);
+    HERO("H", Color.COLOR_GREEN),
+    DEAD_HERO("✝", Color.COLOR_RED);
     private final String sign;
     private final Color color;
 

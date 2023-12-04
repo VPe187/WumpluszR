@@ -7,12 +7,12 @@ import hu.nye.progtech.wumpus.ui.ConsolRenderer;
 /**
  * Main game loop class.
  */
-public class Game {
+public class GameController {
     private final GameState gameState;
     private final InputReader inputReader;
     private final InputHandler inputHandler;
 
-    public Game(GameState gameState, InputReader inputReader, InputHandler inputHandler) {
+    public GameController(GameState gameState, InputReader inputReader, InputHandler inputHandler) {
         this.gameState = gameState;
         this.inputReader = inputReader;
         this.inputHandler = inputHandler;
@@ -23,9 +23,9 @@ public class Game {
      */
     public void start() {
         while (gameState.isRunning()) {
-            ConsolRenderer.render(gameState);
             String input = inputReader.readInput();
             inputHandler.handleInput(input);
+            ConsolRenderer.render(gameState);
         }
     }
 }

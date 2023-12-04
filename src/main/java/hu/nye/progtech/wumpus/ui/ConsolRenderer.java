@@ -73,37 +73,37 @@ public class ConsolRenderer {
     }
 
     private static void firstRow(int boardSize) {
-        print(Unicode.LEFT_UP);
+        print(Unicode.LEFT_UP, Color.COLOR_WHITE);
         for (int i = 1; i < boardSize; i++) {
-            print(Unicode.HORIZONTAL);
-            print(Unicode.HORIZONTAL);
-            print(Unicode.HORIZONTAL);
-            print(Unicode.CROSS_UP);
+            print(Unicode.HORIZONTAL, Color.COLOR_WHITE);
+            print(Unicode.HORIZONTAL, Color.COLOR_WHITE);
+            print(Unicode.HORIZONTAL, Color.COLOR_WHITE);
+            print(Unicode.CROSS_UP, Color.COLOR_WHITE);
         }
-        print(Unicode.HORIZONTAL);
-        print(Unicode.HORIZONTAL);
-        print(Unicode.HORIZONTAL);
-        print(Unicode.RIGHT_UPPER);
+        print(Unicode.HORIZONTAL, Color.COLOR_WHITE);
+        print(Unicode.HORIZONTAL, Color.COLOR_WHITE);
+        print(Unicode.HORIZONTAL, Color.COLOR_WHITE);
+        print(Unicode.RIGHT_UPPER, Color.COLOR_WHITE);
         printLF();
     }
 
     private static void separatorRow(int boardSize) {
-        print(Unicode.VERTICAL_LEFT);
+        print(Unicode.VERTICAL_LEFT, Color.COLOR_WHITE);
         for (int i = 1; i < boardSize; i++) {
-            print(Unicode.HORIZONTAL);
-            print(Unicode.HORIZONTAL);
-            print(Unicode.HORIZONTAL);
-            print(Unicode.CROSS);
+            print(Unicode.HORIZONTAL, Color.COLOR_WHITE);
+            print(Unicode.HORIZONTAL, Color.COLOR_WHITE);
+            print(Unicode.HORIZONTAL, Color.COLOR_WHITE);
+            print(Unicode.CROSS, Color.COLOR_WHITE);
         }
-        print(Unicode.HORIZONTAL);
-        print(Unicode.HORIZONTAL);
-        print(Unicode.HORIZONTAL);
-        print(Unicode.VERTICAL_RIGHT);
+        print(Unicode.HORIZONTAL, Color.COLOR_WHITE);
+        print(Unicode.HORIZONTAL, Color.COLOR_WHITE);
+        print(Unicode.HORIZONTAL, Color.COLOR_WHITE);
+        print(Unicode.VERTICAL_RIGHT, Color.COLOR_WHITE);
         printLF();
     }
 
     private static void internalRow(int boardSize, Cell[][] cells, int row) {
-        print(Unicode.VERTICAL);
+        print(Unicode.VERTICAL, Color.COLOR_WHITE);
         for (int i = 0; i < boardSize; i++) {
             printCell(cells[i][row]);
         }
@@ -111,61 +111,67 @@ public class ConsolRenderer {
     }
 
     private static void lastRow(int boardSize) {
-        print(Unicode.LEFT_DOWN);
+        print(Unicode.LEFT_DOWN, Color.COLOR_WHITE);
         for (int i = 1; i < boardSize; i++) {
-            print(Unicode.HORIZONTAL);
-            print(Unicode.HORIZONTAL);
-            print(Unicode.HORIZONTAL);
-            print(Unicode.CROSS_DOWN);
+            print(Unicode.HORIZONTAL, Color.COLOR_WHITE);
+            print(Unicode.HORIZONTAL, Color.COLOR_WHITE);
+            print(Unicode.HORIZONTAL, Color.COLOR_WHITE);
+            print(Unicode.CROSS_DOWN, Color.COLOR_WHITE);
         }
-        print(Unicode.HORIZONTAL);
-        print(Unicode.HORIZONTAL);
-        print(Unicode.HORIZONTAL);
-        print(Unicode.RIGHT_DOWN);
+        print(Unicode.HORIZONTAL, Color.COLOR_WHITE);
+        print(Unicode.HORIZONTAL, Color.COLOR_WHITE);
+        print(Unicode.HORIZONTAL, Color.COLOR_WHITE);
+        print(Unicode.RIGHT_DOWN, Color.COLOR_WHITE);
         printLF();
     }
 
-    private static void print(Unicode asciiCode) {
+    private static void print(Unicode asciiCode, Color color) {
         System.out.print(Color.COLOR_RESET);
-        System.out.print(Color.COLOR_WHITE);
+        System.out.print(color);
         System.out.print(asciiCode.getValue());
     }
 
     private static void printCell(Cell cell) {
-        print(Unicode.SPACE);
+        print(Unicode.SPACE, Color.COLOR_WHITE);
         printCellValue(cell);
-        print(Unicode.SPACE);
-        print(Unicode.VERTICAL);
+        print(Unicode.SPACE, Color.COLOR_WHITE);
+        print(Unicode.VERTICAL, Color.COLOR_WHITE);
     }
 
     private static void printCellValue(Cell cell) {
         System.out.print(Color.COLOR_RESET);
         System.out.print(cell.getType().getColor());
         if (cell instanceof CellHero) {
-            switch (((CellHero) cell).getSight()) {
-                case NORTH: {
-                    System.out.print(Unicode.NORTH);
-                    break;
+            if (((CellHero) cell).isDead()) {
+                printString("✝", Color.COLOR_RED);
+            } else if (((CellHero) cell).checkGoal()) {
+                printString("✓", Color.COLOR_GREEN);
+            }
+            else {
+                switch (((CellHero) cell).getSight()) {
+                    case NORTH: {
+                        print(Unicode.NORTH, (((CellHero) cell).getHasGold() ? Color.COLOR_YELLOW : Color.COLOR_GREEN));
+                        break;
+                    }
+                    case SOUTH: {
+                        print(Unicode.SOUTH, (((CellHero) cell).getHasGold() ? Color.COLOR_YELLOW : Color.COLOR_GREEN));
+                        break;
+                    }
+                    case WEST: {
+                        print(Unicode.WEST, (((CellHero) cell).getHasGold() ? Color.COLOR_YELLOW : Color.COLOR_GREEN));
+                        break;
+                    }
+                    case EAST: {
+                        print(Unicode.EAST, (((CellHero) cell).getHasGold() ? Color.COLOR_YELLOW : Color.COLOR_GREEN));
+                        break;
+                    }
+                    default:
+                        System.out.print("H");
                 }
-                case SOUTH: {
-                    System.out.print(Unicode.SOUTH);
-                    break;
-                }
-                case WEST: {
-                    System.out.print(Unicode.WEST);
-                    break;
-                }
-                case EAST: {
-                    System.out.print(Unicode.EAST);
-                    break;
-                }
-                default:
-                    System.out.print("H");
             }
         } else {
             System.out.print(cell.getType());
         }
-
     }
 
     private static void printLF() {

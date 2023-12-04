@@ -6,6 +6,7 @@ package hu.nye.progtech.wumpus.model;
 public class CellHero extends Cell {
     private int arrows;
     private boolean hasGold;
+    private boolean dead;
     private Direction sight;
     private final int startCol;
     private final int startRow;
@@ -18,6 +19,7 @@ public class CellHero extends Cell {
         this.startCol = startCol;
         this.startRow = startRow;
         this.sight = sight;
+        dead = false;
     }
 
     public int getArrows() {
@@ -36,11 +38,37 @@ public class CellHero extends Cell {
         return startRow;
     }
 
+    public void setHasGold(boolean hasGold) {
+        this.hasGold = hasGold;
+    }
+
+    public void setDead(boolean dead) {
+        this.dead = dead;
+    }
+
     public Direction getSight() {
         return sight;
     }
 
+    public boolean isDead() {
+        return dead;
+    }
+
     public void rotateLeft() {
         sight = sight.left();
+    }
+
+    public void rotateRight() {
+        sight = sight.right();
+    }
+
+    public void loseArrow() {
+        if(arrows > 0) {
+            arrows--;
+        }
+    }
+
+    public boolean checkGoal() {
+        return getCol() == startCol && getRow() == startRow && getHasGold();
     }
 }
