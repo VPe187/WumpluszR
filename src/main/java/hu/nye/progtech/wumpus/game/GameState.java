@@ -2,22 +2,22 @@ package hu.nye.progtech.wumpus.game;
 
 import hu.nye.progtech.wumpus.board.Board;
 import hu.nye.progtech.wumpus.input.Menu;
-import hu.nye.progtech.wumpus.model.Player;
+import hu.nye.progtech.wumpus.model.PlayerVO;
 
 /**
  * This class store actual user and played board.
  */
 public class GameState {
     private final Board currentBoard;
-    private final Player currentPlayer;
+    private final PlayerVO currentPlayerVO;
     private final Menu currentMenu;
     private boolean running;
     private int steps;
 
-    public GameState(Board board, Player player, Menu menu) {
+    public GameState(Board board, PlayerVO playerVO, Menu menu) {
         this.currentBoard = board;
         this.currentMenu = menu;
-        this.currentPlayer = player;
+        this.currentPlayerVO = playerVO;
         running = true;
         steps = 0;
     }
@@ -26,8 +26,8 @@ public class GameState {
         return currentBoard;
     }
 
-    public Player getCurrentPlayer() {
-        return currentPlayer;
+    public PlayerVO getCurrentPlayer() {
+        return currentPlayerVO;
     }
 
     public Menu getCurrentMenu() {

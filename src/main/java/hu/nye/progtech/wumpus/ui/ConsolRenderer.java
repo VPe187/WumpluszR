@@ -7,7 +7,7 @@ import hu.nye.progtech.wumpus.input.MenuItem;
 import hu.nye.progtech.wumpus.model.Cell;
 import hu.nye.progtech.wumpus.model.CellHero;
 import hu.nye.progtech.wumpus.model.Color;
-import hu.nye.progtech.wumpus.model.Player;
+import hu.nye.progtech.wumpus.model.PlayerVO;
 import hu.nye.progtech.wumpus.util.BoardUtil;
 
 /**
@@ -46,8 +46,8 @@ public class ConsolRenderer {
 
     }
 
-    private static void menu(Menu menu, Player player) {
-        menuHeader(menu.getWidth(), player);
+    private static void menu(Menu menu, PlayerVO playerVO) {
+        menuHeader(menu.getWidth(), playerVO);
         for (MenuItem menuItem : menu.getMenuList()) {
             print(Unicode.SPACE, Color.COLOR_BLACK);
             print(Unicode.SPACE, Color.COLOR_BLACK);
@@ -65,7 +65,7 @@ public class ConsolRenderer {
         printString("Your choiche: ", Color.COLOR_CYAN);
     }
 
-    private static void menuHeader(int menuWidth, Player player) {
+    private static void menuHeader(int menuWidth, PlayerVO playerVO) {
         print(Unicode.SPACE, Color.COLOR_BLACK);
         print(Unicode.SPACE, Color.COLOR_BLACK);
         printRepeat(menuWidth, Unicode.HORIZONTAL.toString(), Color.COLOR_WHITE);
@@ -73,8 +73,8 @@ public class ConsolRenderer {
         print(Unicode.SPACE, Color.COLOR_BLACK);
         print(Unicode.SPACE, Color.COLOR_BLACK);
         printString(Unicode.HORIZONTAL + Unicode.HORIZONTAL.toString() + " " + menuHeaderText + " ", Color.COLOR_WHITE);
-        printString(player.getNickName() + " ", Color.COLOR_YELLOW);
-        printRepeat(menuWidth - menuHeaderText.length() - player.getNickName().length() - 5,
+        printString(playerVO.getNickName() + " ", Color.COLOR_YELLOW);
+        printRepeat(menuWidth - menuHeaderText.length() - playerVO.getNickName().length() - 5,
                 Unicode.HORIZONTAL.toString(), Color.COLOR_WHITE);
         printLF();
     }

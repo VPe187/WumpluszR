@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit test for {@link CmdMove}
+ */
 class CmdMoveTest {
     private static final String INPUT = "m";
     private static final String INPUT_OTHER = "q";

@@ -2,24 +2,34 @@ package hu.nye.progtech.wumpus.model;
 
 import hu.nye.progtech.wumpus.board.BoardParser;
 import hu.nye.progtech.wumpus.board.BoardRaw;
-import hu.nye.progtech.wumpus.command.CmdRotateLeft;
 import hu.nye.progtech.wumpus.exception.BoardParsingException;
 import hu.nye.progtech.wumpus.game.GameState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit test for {@link CellHero}
+ */
+@ExtendWith(MockitoExtension.class)
 class CellHeroTest {
     private static final Direction initialDirection = Direction.EAST;
     private static final Direction afterLeftDirection_1 = Direction.NORTH;
     private static final Direction afterLeftDirection_2 = Direction.WEST;
     private static final Direction afterLeftDirection_3 = Direction.SOUTH;
-    private static final Direction afterLeftDirection_4 = Direction.EAST;
-    private CellHero underTest;
+    @Mock
+    private BoardRaw boardRaw;
+    @Mock
+    private BoardParser boardParser;
+    @Mock
     private GameState gameState;
+    private CellHero underTest;
     private final List<String> rows = List.of(
             "6 B 5 E",
             "WWWWWW",
@@ -32,8 +42,8 @@ class CellHeroTest {
 
     @BeforeEach
     public void setUp() throws BoardParsingException {
-        BoardRaw boardRaw = new BoardRaw(rows);
-        BoardParser boardParser = new BoardParser(boardRaw);
+        boardRaw = new BoardRaw(rows);
+        boardParser = new BoardParser(boardRaw);
         gameState = new GameState(boardParser.parseRawBoard(), null, null);
         underTest = gameState.getCurrentBoard().getHeroCell();
     }
@@ -41,51 +51,60 @@ class CellHeroTest {
     @Test
     public void testInitialDirection() {
         // given
+        underTest = gameState.getCurrentBoard().getHeroCell();
         // when
+        Direction result = underTest.getSight();
         // then
-        assertEquals(initialDirection, underTest.getSight());
+        assertEquals(initialDirection, result);
     }
 
     @Test
-    public void testHeroTurnRightFirst() {
+    public void testHeroTurnRightOneTime() {
         // given
+        underTest = gameState.getCurrentBoard().getHeroCell();
         // when
-        gameState.getCurrentBoard().getHeroCell().rotateLeft();
+        underTest.rotateLeft();
+        Direction result = underTest.getSight();
         // then
-        assertEquals(afterLeftDirection_1, underTest.getSight());
+        assertEquals(afterLeftDirection_1, result);
     }
 
     @Test
-    public void testHeroTurnRightSecond() {
+    public void testHeroTurnRightTwoTimes() {
         // given
+        underTest = gameState.getCurrentBoard().getHeroCell();
         // when
-        gameState.getCurrentBoard().getHeroCell().rotateLeft();
+        underTest.rotateLeft();
+        underTest.rotateLeft();
+        Direction result = underTest.getSight();
         // then
-        assertEquals(afterLeftDirection_2, underTest.getSight());
+        assertEquals(afterLeftDirection_2, result);
     }
 
     @Test
-    public void testHeroTurnRightThird() {
+    public void testHeroTurnRightThreeTimes() {
         // given
+        underTest = gameState.getCurrentBoard().getHeroCell();
         // when
-        gameState.getCurrentBoard().getHeroCell().rotateLeft();
+        underTest.rotateLeft();
+        underTest.rotateLeft();
+        underTest.rotateLeft();
+        Direction result = underTest.getSight();
         // then
-        assertEquals(afterLeftDirection_3, underTest.getSight());
+        assertEquals(afterLeftDirection_3, result);
     }
+
     @Test
-    public void testHeroTurnRightForth() {
+    public void testHeroTurnRightFourTimes() {
         // given
+        underTest = gameState.getCurrentBoard().getHeroCell();
         // when
-        gameState.getCurrentBoard().getHeroCell().rotateLeft();
+        underTest.rotateLeft();
+        underTest.rotateLeft();
+        underTest.rotateLeft();
+        underTest.rotateLeft();
+        Direction result = underTest.getSight();
         // then
-        assertEquals(afterLeftDirection_4, underTest.getSight());
-    }
-    @Test
-    public void testHeroTurnRightToInitialPosition() {
-        // given
-        // when
-        gameState.getCurrentBoard().getHeroCell().rotateLeft();
-        // then
-        assertEquals(initialDirection, underTest.getSight());
+        assertEquals(initialDirection, result);
     }
 }

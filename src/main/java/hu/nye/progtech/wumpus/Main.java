@@ -11,6 +11,7 @@ import hu.nye.progtech.wumpus.board.BoardRaw;
 import hu.nye.progtech.wumpus.board.BufferedBoardReader;
 import hu.nye.progtech.wumpus.command.CmdMove;
 import hu.nye.progtech.wumpus.command.CmdQuit;
+import hu.nye.progtech.wumpus.command.CmdRestart;
 import hu.nye.progtech.wumpus.command.CmdRotateLeft;
 import hu.nye.progtech.wumpus.command.CmdRotateRight;
 import hu.nye.progtech.wumpus.command.CmdShoot;
@@ -22,7 +23,7 @@ import hu.nye.progtech.wumpus.input.InputHandler;
 import hu.nye.progtech.wumpus.input.InputReader;
 import hu.nye.progtech.wumpus.input.Menu;
 import hu.nye.progtech.wumpus.input.MenuItem;
-import hu.nye.progtech.wumpus.model.Player;
+import hu.nye.progtech.wumpus.model.PlayerVO;
 import hu.nye.progtech.wumpus.ui.ConsolRenderer;
 
 /**
@@ -48,8 +49,8 @@ public class Main {
         BoardParser boardParser = new BoardParser(boardRaw);
         Board gameBoard = boardParser.parseRawBoard();
         Menu mainMenu = createMainMenu(gameBoard.getColSize());
-        Player player = new Player("VPe187");
-        GameState gameState = new GameState(gameBoard, player, mainMenu);
+        PlayerVO playerVO = PlayerVO.builder().withNickName("VPe187").build();
+        GameState gameState = new GameState(gameBoard, playerVO, mainMenu);
         List<Command> commands = createCommands(gameState);
         GameController wumpus = new GameController(gameState, new InputReader(new BufferedReader(new InputStreamReader(System.in))),
                 new InputHandler(commands));
@@ -84,6 +85,7 @@ public class Main {
                 new CmdRotateLeft(gameState),
                 new CmdRotateRight(gameState),
                 new CmdShoot(gameState),
+                new CmdRestart(gameState),
                 new CmdQuit(gameState)
         );
     }

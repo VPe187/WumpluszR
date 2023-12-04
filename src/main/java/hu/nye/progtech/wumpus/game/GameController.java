@@ -27,5 +27,6 @@ public class GameController {
             inputHandler.handleInput(input);
             ConsolRenderer.render(gameState);
         }
+        System.exit(0);
     }
 }

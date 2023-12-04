@@ -12,14 +12,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit test for {@link CmdRotateLeft}
+ */
 class CmdRotateLeftTest {
     private static final String INPUT = "l";
     private static final String INPUT_OTHER = "r";
     private static final Direction initialDirection = Direction.EAST;
-    private static final Direction afterLeftDirection_1 = Direction.NORTH;
-    private static final Direction afterLeftDirection_2 = Direction.WEST;
-    private static final Direction afterLeftDirection_3 = Direction.SOUTH;
-    private static final Direction afterLeftDirection_4 = Direction.EAST;
     private CmdRotateLeft underTest;
     private GameState gameState;
     private final List<String> rows = List.of(

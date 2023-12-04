@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit test for {@link CmdQuit}
+ */
 class CmdQuitTest {
     private static final String INPUT = "q";
     private static final String INPUT_OTHER = "m";
