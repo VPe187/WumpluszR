@@ -62,8 +62,11 @@ public class CellHero extends Cell {
         sight = sight.right();
     }
 
+    /**
+     * Hero loose one arrow.
+     */
     public void loseArrow() {
-        if(arrows > 0) {
+        if (arrows > 0) {
             arrows--;
         }
     }

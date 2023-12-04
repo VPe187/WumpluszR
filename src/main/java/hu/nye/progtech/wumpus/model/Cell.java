@@ -38,6 +38,6 @@ public class Cell {
 
     @Override
     public String toString() {
-        return BoardUtil.letterFromInteger(col) + row;
+        return BoardUtil.letterFromInteger(col) + (row + 1);
     }
 }

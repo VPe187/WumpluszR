@@ -8,6 +8,7 @@ import hu.nye.progtech.wumpus.model.Cell;
 import hu.nye.progtech.wumpus.model.CellHero;
 import hu.nye.progtech.wumpus.model.Color;
 import hu.nye.progtech.wumpus.model.Player;
+import hu.nye.progtech.wumpus.util.BoardUtil;
 
 /**
  * This class render {@link Board} to console.
@@ -31,8 +32,10 @@ public class ConsolRenderer {
     private static void renderBoard(Board board) {
         Cell[][] cells = board.getCells();
         int boardSize = board.getColSize();
+        printString(Unicode.SPACE.toString(), Color.COLOR_BLUE);
         firstRow(boardSize);
         for (int i = 0; i < boardSize; i++) {
+            printString(String.valueOf(i + 1), Color.COLOR_BLUE);
             internalRow(boardSize, cells, i);
             if (i == boardSize - 1) {
                 lastRow(boardSize);
@@ -46,6 +49,8 @@ public class ConsolRenderer {
     private static void menu(Menu menu, Player player) {
         menuHeader(menu.getWidth(), player);
         for (MenuItem menuItem : menu.getMenuList()) {
+            print(Unicode.SPACE, Color.COLOR_BLACK);
+            print(Unicode.SPACE, Color.COLOR_BLACK);
             printString(menuItem.getLabel() + menuPadding, Color.COLOR_WHITE);
             printRepeat(menu.getWidth() - menuItem.getLabel().length() - menuHotkeySeparator.length() -
                             menuPadding.length() * 2 - menuItem.getHotKey().length(), ".", Color.COLOR_WHITE);
@@ -55,12 +60,18 @@ public class ConsolRenderer {
         }
         menuFooter(menu.getWidth());
         printLF();
+        print(Unicode.SPACE, Color.COLOR_BLACK);
+        print(Unicode.SPACE, Color.COLOR_BLACK);
         printString("Your choiche: ", Color.COLOR_CYAN);
     }
 
     private static void menuHeader(int menuWidth, Player player) {
+        print(Unicode.SPACE, Color.COLOR_BLACK);
+        print(Unicode.SPACE, Color.COLOR_BLACK);
         printRepeat(menuWidth, Unicode.HORIZONTAL.toString(), Color.COLOR_WHITE);
         printLF();
+        print(Unicode.SPACE, Color.COLOR_BLACK);
+        print(Unicode.SPACE, Color.COLOR_BLACK);
         printString(Unicode.HORIZONTAL + Unicode.HORIZONTAL.toString() + " " + menuHeaderText + " ", Color.COLOR_WHITE);
         printString(player.getNickName() + " ", Color.COLOR_YELLOW);
         printRepeat(menuWidth - menuHeaderText.length() - player.getNickName().length() - 5,
@@ -69,10 +80,22 @@ public class ConsolRenderer {
     }
 
     private static void menuFooter(int menuWidth) {
+        print(Unicode.SPACE, Color.COLOR_BLACK);
+        print(Unicode.SPACE, Color.COLOR_BLACK);
         printRepeat(menuWidth, Unicode.HORIZONTAL.toString(), Color.COLOR_WHITE);
     }
 
     private static void firstRow(int boardSize) {
+        print(Unicode.SPACE, Color.COLOR_BLACK);
+        for (int i = 0; i < boardSize; i++) {
+            print(Unicode.SPACE, Color.COLOR_BLACK);
+            print(Unicode.SPACE, Color.COLOR_BLACK);
+            printString(BoardUtil.letterFromInteger(i), Color.COLOR_BLUE);
+            print(Unicode.SPACE, Color.COLOR_BLACK);
+        }
+        printLF();
+        print(Unicode.SPACE, Color.COLOR_BLACK);
+        print(Unicode.SPACE, Color.COLOR_BLACK);
         print(Unicode.LEFT_UP, Color.COLOR_WHITE);
         for (int i = 1; i < boardSize; i++) {
             print(Unicode.HORIZONTAL, Color.COLOR_WHITE);
@@ -88,6 +111,8 @@ public class ConsolRenderer {
     }
 
     private static void separatorRow(int boardSize) {
+        print(Unicode.SPACE, Color.COLOR_BLACK);
+        print(Unicode.SPACE, Color.COLOR_BLACK);
         print(Unicode.VERTICAL_LEFT, Color.COLOR_WHITE);
         for (int i = 1; i < boardSize; i++) {
             print(Unicode.HORIZONTAL, Color.COLOR_WHITE);
@@ -103,6 +128,7 @@ public class ConsolRenderer {
     }
 
     private static void internalRow(int boardSize, Cell[][] cells, int row) {
+        print(Unicode.SPACE, Color.COLOR_BLACK);
         print(Unicode.VERTICAL, Color.COLOR_WHITE);
         for (int i = 0; i < boardSize; i++) {
             printCell(cells[i][row]);
@@ -111,6 +137,8 @@ public class ConsolRenderer {
     }
 
     private static void lastRow(int boardSize) {
+        print(Unicode.SPACE, Color.COLOR_BLACK);
+        print(Unicode.SPACE, Color.COLOR_BLACK);
         print(Unicode.LEFT_DOWN, Color.COLOR_WHITE);
         for (int i = 1; i < boardSize; i++) {
             print(Unicode.HORIZONTAL, Color.COLOR_WHITE);
@@ -146,8 +174,7 @@ public class ConsolRenderer {
                 printString("✝", Color.COLOR_RED);
             } else if (((CellHero) cell).checkGoal()) {
                 printString("✓", Color.COLOR_GREEN);
-            }
-            else {
+            } else {
                 switch (((CellHero) cell).getSight()) {
                     case NORTH: {
                         print(Unicode.NORTH, (((CellHero) cell).getHasGold() ? Color.COLOR_YELLOW : Color.COLOR_GREEN));

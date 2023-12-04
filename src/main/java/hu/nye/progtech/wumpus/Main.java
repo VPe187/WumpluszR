@@ -13,6 +13,7 @@ import hu.nye.progtech.wumpus.command.CmdMove;
 import hu.nye.progtech.wumpus.command.CmdQuit;
 import hu.nye.progtech.wumpus.command.CmdRotateLeft;
 import hu.nye.progtech.wumpus.command.CmdRotateRight;
+import hu.nye.progtech.wumpus.command.CmdShoot;
 import hu.nye.progtech.wumpus.command.Command;
 import hu.nye.progtech.wumpus.exception.BoardParsingException;
 import hu.nye.progtech.wumpus.game.GameController;
@@ -79,9 +80,10 @@ public class Main {
 
     private static List<Command> createCommands(GameState gameState) {
         return List.of(
+                new CmdMove(gameState),
                 new CmdRotateLeft(gameState),
                 new CmdRotateRight(gameState),
-                new CmdMove(gameState),
+                new CmdShoot(gameState),
                 new CmdQuit(gameState)
         );
     }
