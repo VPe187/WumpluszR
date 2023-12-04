@@ -1,4 +1,4 @@
-package hu.nye.progtech.wumpus;
+package hu.nye.progtech.wumpus.util;
 
 import java.util.Objects;
 

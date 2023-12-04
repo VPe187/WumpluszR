@@ -1,133 +1,188 @@
 package hu.nye.progtech.wumpus.ui;
 
 import hu.nye.progtech.wumpus.board.Board;
+import hu.nye.progtech.wumpus.game.GameState;
 import hu.nye.progtech.wumpus.input.Menu;
 import hu.nye.progtech.wumpus.input.MenuItem;
 import hu.nye.progtech.wumpus.model.Cell;
+import hu.nye.progtech.wumpus.model.CellHero;
 import hu.nye.progtech.wumpus.model.Color;
-import hu.nye.progtech.wumpus.model.DrawType;
+import hu.nye.progtech.wumpus.model.Player;
 
 /**
  * This class render {@link Board} to console.
  */
 public class ConsolRenderer {
+
+    private static final String menuHeaderText = "MENU";
+    private static final String menuHotkeySeparator = "()";
+    private static final String menuPadding = " ";
+
     /**
      * This is a render method.
      *
-     * @param board as {@link Board}
+     * @param gameState as {@link GameState}
      */
-    public static void renderBoard(Board board) {
+    public static void render(GameState gameState) {
+        renderBoard(gameState.getCurrentBoard());
+        menu(gameState.getCurrentMenu(), gameState.getCurrentPlayer());
+    }
+
+    private static void renderBoard(Board board) {
         Cell[][] cells = board.getCells();
-        int boardSize = board.getSize();
-        typeFirstRow(boardSize);
+        int boardSize = board.getColSize();
+        firstRow(boardSize);
         for (int i = 0; i < boardSize; i++) {
-            typeInternalRow(boardSize, cells, i);
+            internalRow(boardSize, cells, i);
             if (i == boardSize - 1) {
-                tpyeLastRow(boardSize);
+                lastRow(boardSize);
             } else {
-                typeSeparatorRow(boardSize);
+                separatorRow(boardSize);
             }
         }
 
     }
 
-    /**
-     * Render a cell.
-     *
-     * @param cell as {@link Cell}
-     */
-    public static void typeCell(Cell cell) {
-        echo(DrawType.Space);
-        echoCell(cell);
-        echo(DrawType.Space);
-        echo(DrawType.Vertical);
-    }
-
-    public static void renderMenu(Menu menu) {
-        for (MenuItem menuItem: menu.getMenuList()) {
-            echoString(menuItem.getLabel(), Color.COLOR_WHITE);
-            int menuWidth = (18 + 6) - 2;
-            int labelLength = menuItem.getLabel().length();
-            for (int i = 0; i < menuWidth - labelLength; i++) {
-                echoString(".", Color.COLOR_WHITE);
-            }
-            echoString("(" + menuItem.getHotKey() + ")", Color.COLOR_YELLOW);
-            echoLF();
+    private static void menu(Menu menu, Player player) {
+        menuHeader(menu.getWidth(), player);
+        for (MenuItem menuItem : menu.getMenuList()) {
+            printString(menuItem.getLabel() + menuPadding, Color.COLOR_WHITE);
+            printRepeat(menu.getWidth() - menuItem.getLabel().length() - menuHotkeySeparator.length() -
+                            menuPadding.length() * 2 - menuItem.getHotKey().length(), ".", Color.COLOR_WHITE);
+            printString(menuPadding + menuHotkeySeparator.charAt(0) + menuItem.getHotKey() +
+                   menuHotkeySeparator.charAt(1), Color.COLOR_GREEN);
+            printLF();
         }
+        menuFooter(menu.getWidth());
+        printLF();
+        printString("Your choiche: ", Color.COLOR_CYAN);
     }
 
-    private static void typeFirstRow(int boardSize) {
-        echo(DrawType.LeftUp);
+    private static void menuHeader(int menuWidth, Player player) {
+        printRepeat(menuWidth, Unicode.HORIZONTAL.toString(), Color.COLOR_WHITE);
+        printLF();
+        printString(Unicode.HORIZONTAL + Unicode.HORIZONTAL.toString() + " " + menuHeaderText + " ", Color.COLOR_WHITE);
+        printString(player.getNickName() + " ", Color.COLOR_YELLOW);
+        printRepeat(menuWidth - menuHeaderText.length() - player.getNickName().length() - 5,
+                Unicode.HORIZONTAL.toString(), Color.COLOR_WHITE);
+        printLF();
+    }
+
+    private static void menuFooter(int menuWidth) {
+        printRepeat(menuWidth, Unicode.HORIZONTAL.toString(), Color.COLOR_WHITE);
+    }
+
+    private static void firstRow(int boardSize) {
+        print(Unicode.LEFT_UP);
         for (int i = 1; i < boardSize; i++) {
-            echo(DrawType.Horizontal);
-            echo(DrawType.Horizontal);
-            echo(DrawType.Horizontal);
-            echo(DrawType.CrossUp);
+            print(Unicode.HORIZONTAL);
+            print(Unicode.HORIZONTAL);
+            print(Unicode.HORIZONTAL);
+            print(Unicode.CROSS_UP);
         }
-        echo(DrawType.Horizontal);
-        echo(DrawType.Horizontal);
-        echo(DrawType.Horizontal);
-        echo(DrawType.RightUpper);
-        echoLF();
+        print(Unicode.HORIZONTAL);
+        print(Unicode.HORIZONTAL);
+        print(Unicode.HORIZONTAL);
+        print(Unicode.RIGHT_UPPER);
+        printLF();
     }
 
-    private static void typeSeparatorRow(int boardSize) {
-        echo(DrawType.VerticalLeft);
+    private static void separatorRow(int boardSize) {
+        print(Unicode.VERTICAL_LEFT);
         for (int i = 1; i < boardSize; i++) {
-            echo(DrawType.Horizontal);
-            echo(DrawType.Horizontal);
-            echo(DrawType.Horizontal);
-            echo(DrawType.Cross);
+            print(Unicode.HORIZONTAL);
+            print(Unicode.HORIZONTAL);
+            print(Unicode.HORIZONTAL);
+            print(Unicode.CROSS);
         }
-        echo(DrawType.Horizontal);
-        echo(DrawType.Horizontal);
-        echo(DrawType.Horizontal);
-        echo(DrawType.VerticalRight);
-        echoLF();
+        print(Unicode.HORIZONTAL);
+        print(Unicode.HORIZONTAL);
+        print(Unicode.HORIZONTAL);
+        print(Unicode.VERTICAL_RIGHT);
+        printLF();
     }
 
-    private static void typeInternalRow(int boardSize, Cell[][] cells, int row) {
-        echo(DrawType.Vertical);
+    private static void internalRow(int boardSize, Cell[][] cells, int row) {
+        print(Unicode.VERTICAL);
         for (int i = 0; i < boardSize; i++) {
-            typeCell(cells[i][row]);
+            printCell(cells[i][row]);
         }
-        echoLF();
+        printLF();
     }
 
-    private static void tpyeLastRow(int boardSize) {
-        echo(DrawType.LeftDown);
+    private static void lastRow(int boardSize) {
+        print(Unicode.LEFT_DOWN);
         for (int i = 1; i < boardSize; i++) {
-            echo(DrawType.Horizontal);
-            echo(DrawType.Horizontal);
-            echo(DrawType.Horizontal);
-            echo(DrawType.CrossDown);
+            print(Unicode.HORIZONTAL);
+            print(Unicode.HORIZONTAL);
+            print(Unicode.HORIZONTAL);
+            print(Unicode.CROSS_DOWN);
         }
-        echo(DrawType.Horizontal);
-        echo(DrawType.Horizontal);
-        echo(DrawType.Horizontal);
-        echo(DrawType.RightDown);
-        echoLF();
+        print(Unicode.HORIZONTAL);
+        print(Unicode.HORIZONTAL);
+        print(Unicode.HORIZONTAL);
+        print(Unicode.RIGHT_DOWN);
+        printLF();
     }
 
-    private static void echo(DrawType asciiCode) {
+    private static void print(Unicode asciiCode) {
         System.out.print(Color.COLOR_RESET);
         System.out.print(Color.COLOR_WHITE);
         System.out.print(asciiCode.getValue());
     }
 
-    private static void echoCell(Cell cell) {
-        System.out.print(Color.COLOR_RESET);
-        System.out.print(cell.getType().getColor());
-        System.out.print(cell.getType());
+    private static void printCell(Cell cell) {
+        print(Unicode.SPACE);
+        printCellValue(cell);
+        print(Unicode.SPACE);
+        print(Unicode.VERTICAL);
     }
 
-    private static void echoLF() {
+    private static void printCellValue(Cell cell) {
+        System.out.print(Color.COLOR_RESET);
+        System.out.print(cell.getType().getColor());
+        if (cell instanceof CellHero) {
+            switch (((CellHero) cell).getSight()) {
+                case NORTH: {
+                    System.out.print(Unicode.NORTH);
+                    break;
+                }
+                case SOUTH: {
+                    System.out.print(Unicode.SOUTH);
+                    break;
+                }
+                case WEST: {
+                    System.out.print(Unicode.WEST);
+                    break;
+                }
+                case EAST: {
+                    System.out.print(Unicode.EAST);
+                    break;
+                }
+                default:
+                    System.out.print("H");
+            }
+        } else {
+            System.out.print(cell.getType());
+        }
+
+    }
+
+    private static void printLF() {
         System.out.println();
     }
 
-    private static void echoString(String text, Color color) {
+    private static void printString(String text, Color color) {
         System.out.print(Color.COLOR_RESET);
         System.out.print(color);
         System.out.print(text);
-    };
+    }
+
+    private static void printRepeat(int width, String text, Color color) {
+        System.out.print(Color.COLOR_RESET);
+        System.out.print(color);
+        for (int i = 0; i < width; i++) {
+            printString(text, color);
+        }
+    }
 }

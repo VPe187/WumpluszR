@@ -2,12 +2,12 @@ package hu.nye.progtech.wumpus.board;
 
 import java.util.regex.Pattern;
 
-import hu.nye.progtech.wumpus.BoardUtil;
 import hu.nye.progtech.wumpus.exception.BoardParsingException;
 import hu.nye.progtech.wumpus.model.Cell;
 import hu.nye.progtech.wumpus.model.CellHero;
 import hu.nye.progtech.wumpus.model.CellType;
 import hu.nye.progtech.wumpus.model.Direction;
+import hu.nye.progtech.wumpus.util.BoardUtil;
 
 /**
  * Parse raw board data and generate {@link Board}.
@@ -19,7 +19,6 @@ public class BoardParser {
     private static final String VALID_HERO_SIGHT_REGEX = "[NSEW]";
     private static final String VALID_ROW_LETTERS = "[WUGP_]+";
     final BoardRaw boardRaw;
-    Board board;
     private int boardSize;
     private int startCol;
     private int startRow;
@@ -43,7 +42,7 @@ public class BoardParser {
     public Board parseRawBoard() throws BoardParsingException {
         parseFirstRow();
         parseRemainingRows();
-        return Board.builder().withCells(cells).withSize(boardSize).withStartCol(startCol).withStartRow(startRow).build();
+        return new Board(boardSize, boardSize, cells);
     }
 
     private void parseFirstRow() throws BoardParsingException {
@@ -73,7 +72,7 @@ public class BoardParser {
         }
     }
 
-    private Cell[][] parseRemainingRows() throws BoardParsingException {
+    private void parseRemainingRows() throws BoardParsingException {
         cells = new Cell[boardSize][boardSize];
         int i = 0;
         for (String row : boardRaw.getRemainingRows()) {
@@ -81,12 +80,13 @@ public class BoardParser {
                 throw new BoardParsingException("Row contains invalid character!");
             } else {
                 for (int j = 0; j < row.length(); j++) {
-                    cells[j][i] = Cell.builder().withType(CellType.getByValue(row.split("")[j])).build();
+                    cells[j][i] = new Cell(j, i, CellType.getByValue(row.split("")[j]));
                 }
             }
             i++;
         }
-        cells[startCol - 1][startRow - 1] = Cell.builder().buildHero();
-        return cells;
+        cells[startCol - 1][startRow - 1] =
+                new CellHero(startCol - 1, startRow - 1, 1, false,
+                        startCol - 1, startRow - 1, direction);
     }
 }

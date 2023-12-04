@@ -1,47 +1,43 @@
 package hu.nye.progtech.wumpus.model;
 
+import hu.nye.progtech.wumpus.util.BoardUtil;
+
 /**
  * This class represent one field of board.
  */
 public class Cell {
-    public static CellBuilder builder() {
-        return new CellBuilder();
-    }
-
     private final CellType type;
+    private int col;
+    private int row;
 
-    public Cell(CellType value) {
+    public Cell(int col, int row, CellType value) {
         this.type = value;
+        this.col = col;
+        this.row = row;
     }
 
     public CellType getType() {
         return type;
     }
 
-    /**
-     * Builder for {@link Cell}.
-     */
-    public static final class CellBuilder {
-        private CellType type;
+    public int getCol() {
+        return col;
+    }
 
-        public static CellBuilder builder() {
-            return new CellBuilder();
-        }
+    public int getRow() {
+        return row;
+    }
 
-        /**
-         * Cell builder with value.
-         */
-        public CellBuilder withType(CellType value) {
-            type = value;
-            return this;
-        }
+    public void setCol(int col) {
+        this.col = col;
+    }
 
-        public Cell build() {
-            return new Cell(type);
-        }
+    public void setRow(int row) {
+        this.row = row;
+    }
 
-        public Cell buildHero() {
-            return new CellHero();
-        }
+    @Override
+    public String toString() {
+        return BoardUtil.letterFromInteger(col) + row;
     }
 }

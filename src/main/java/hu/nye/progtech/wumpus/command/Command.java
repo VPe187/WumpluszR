@@ -1,4 +1,4 @@
-package hu.nye.progtech.wumpus.Command;
+package hu.nye.progtech.wumpus.command;
 
 /**
  * Used to implement the commands that the user can use during the game.

@@ -19,7 +19,6 @@ public class InputReader {
      */
     public String readInput() {
         String input = null;
-        System.out.print("#:");
         try {
             input = reader.readLine();
         } catch (IOException e) {
