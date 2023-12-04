@@ -6,7 +6,7 @@ import hu.nye.progtech.wumpus.game.GameState;
 import hu.nye.progtech.wumpus.model.Cell;
 
 /**
- * Move Hero to next cell if Hero can move to.
+ * Move command.
  */
 public class CmdMove implements Command {
     private static final String COMMAND = "m";

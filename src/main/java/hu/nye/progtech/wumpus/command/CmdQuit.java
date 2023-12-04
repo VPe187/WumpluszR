@@ -3,7 +3,7 @@ package hu.nye.progtech.wumpus.command;
 import hu.nye.progtech.wumpus.game.GameState;
 
 /**
- * Quit command. This interrupt the game cycle.
+ * Quit command.
  */
 public class CmdQuit implements Command {
     private static final String COMMAND = "q";

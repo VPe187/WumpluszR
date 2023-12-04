@@ -8,6 +8,7 @@ public class PlayerVO {
     public static PlayerVOBuilder builder() {
         return new PlayerVOBuilder();
     }
+
     private final String nickName;
 
     public PlayerVO(String nickName) {
@@ -18,6 +19,9 @@ public class PlayerVO {
         return nickName;
     }
 
+    /**
+     * Player Value Object Class.
+     */
     public static final class PlayerVOBuilder {
         private String nickName;
 

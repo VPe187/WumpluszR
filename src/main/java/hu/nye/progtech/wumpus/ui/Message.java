@@ -5,6 +5,7 @@ package hu.nye.progtech.wumpus.ui;
  */
 public class Message {
     public static void printMessage(String format, Object... parameters) {
+        System.out.print("  ");
         System.out.printf(format + "%n", parameters);
     }
 }

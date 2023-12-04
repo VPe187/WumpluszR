@@ -6,7 +6,7 @@ import hu.nye.progtech.wumpus.game.GameState;
 import hu.nye.progtech.wumpus.model.CellHero;
 
 /**
- * Shoot arrow.
+ * Shoot command.
  */
 public class CmdShoot implements Command {
     private static final String COMMAND = "s";

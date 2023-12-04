@@ -3,7 +3,7 @@ package hu.nye.progtech.wumpus.command;
 import hu.nye.progtech.wumpus.game.GameState;
 
 /**
- * This rotate Hero left.
+ * Rotate left command.
  */
 public class CmdRotateLeft implements Command {
     private static final String COMMAND = "l";

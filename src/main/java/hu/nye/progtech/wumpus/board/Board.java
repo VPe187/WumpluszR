@@ -11,12 +11,14 @@ import hu.nye.progtech.wumpus.model.Direction;
 public class Board {
     private final int colSize;
     private final int rowSize;
-    private final Cell[][] cells;
+    private Cell[][] cells;
+    private final Cell[][] startCells;
 
     public Board(int colSize, int rowSize, Cell[][] cells) {
         this.colSize = colSize;
         this.rowSize = rowSize;
         this.cells = cells;
+        this.startCells = deepCopy(cells);
     }
 
     public void setOneCell(int col, int row, Cell cell) {
@@ -106,6 +108,32 @@ public class Board {
         heroCell.setCol(targetCol);
         heroCell.setRow(targetRow);
         setOneCell(targetCol, targetRow, heroCell);
+    }
+
+    public void reset() {
+        cells = startCells;
+    }
+
+    private Cell[][] deepCopy(Cell[][] sourceCells) {
+        Cell[][] newCells = new Cell[sourceCells.length][sourceCells.length];
+        for (int i = 0; i < sourceCells.length; i++) {
+            for (int j = 0; j < sourceCells.length; j++) {
+                if (sourceCells[j][i] instanceof CellHero) {
+                    newCells[j][i] = new CellHero(
+                            sourceCells[j][i].getCol(),
+                            sourceCells[j][i].getRow(),
+                            ((CellHero) sourceCells[j][i]).getArrows(),
+                            ((CellHero) sourceCells[j][i]).getHasGold(),
+                            ((CellHero) sourceCells[j][i]).getStartCol(),
+                            ((CellHero) sourceCells[j][i]).getStartRow(),
+                            ((CellHero) sourceCells[j][i]).getSight()
+                    );
+                } else {
+                    newCells[j][i] = new Cell(sourceCells[j][i].getCol(), sourceCells[j][i].getRow(), sourceCells[j][i].getType());
+                }
+            }
+        }
+        return newCells;
     }
 
     @Override
