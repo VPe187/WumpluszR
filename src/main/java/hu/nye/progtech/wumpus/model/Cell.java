@@ -1,14 +1,24 @@
 package hu.nye.progtech.wumpus.model;
 
+import java.io.Serializable;
+
 import hu.nye.progtech.wumpus.util.BoardUtil;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 /**
  * This class represent one field of board.
  */
-public class Cell {
+@XmlRootElement(name = "Cell")
+public class Cell implements Serializable {
+
     private final CellType type;
     private int col;
     private int row;
+
+    public Cell() {
+        this.type = null;
+    }
 
     public Cell(int col, int row, CellType value) {
         this.type = value;
@@ -16,14 +26,17 @@ public class Cell {
         this.row = row;
     }
 
+    @XmlAttribute
     public CellType getType() {
         return type;
     }
 
+    @XmlAttribute
     public int getCol() {
         return col;
     }
 
+    @XmlAttribute
     public int getRow() {
         return row;
     }

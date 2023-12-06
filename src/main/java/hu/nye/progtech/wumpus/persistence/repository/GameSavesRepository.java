@@ -1,4 +1,4 @@
-package hu.nye.progtech.wumpus.persistence.jdbc;
+package hu.nye.progtech.wumpus.persistence.repository;
 
 import hu.nye.progtech.wumpus.board.Board;
 

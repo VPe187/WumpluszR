@@ -1,8 +1,10 @@
 package hu.nye.progtech.wumpus;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.util.List;
 
 import hu.nye.progtech.wumpus.board.Board;
@@ -14,6 +16,7 @@ import hu.nye.progtech.wumpus.command.CmdQuit;
 import hu.nye.progtech.wumpus.command.CmdRestart;
 import hu.nye.progtech.wumpus.command.CmdRotateLeft;
 import hu.nye.progtech.wumpus.command.CmdRotateRight;
+import hu.nye.progtech.wumpus.command.CmdSave;
 import hu.nye.progtech.wumpus.command.CmdShoot;
 import hu.nye.progtech.wumpus.command.Command;
 import hu.nye.progtech.wumpus.exception.BoardParsingException;
@@ -24,7 +27,13 @@ import hu.nye.progtech.wumpus.input.InputReader;
 import hu.nye.progtech.wumpus.input.Menu;
 import hu.nye.progtech.wumpus.input.MenuItem;
 import hu.nye.progtech.wumpus.model.PlayerVO;
+import hu.nye.progtech.wumpus.persistence.repository.BinaryGameSavesRepository;
+import hu.nye.progtech.wumpus.persistence.repository.JdbcGameSavesRepository;
+import hu.nye.progtech.wumpus.persistence.repository.XmlGameSavesRepository;
 import hu.nye.progtech.wumpus.ui.ConsolRenderer;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
 
 /**
  *  NYE Progtech Assigment - Wumplusz Refactored.
@@ -33,7 +42,7 @@ public class Main {
     /**
      * Application entry point.
      */
-    public static void main(String[] args) throws BoardParsingException {
+    public static void main(String[] args) throws BoardParsingException, JAXBException, IOException {
         InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("wumpuszinput.txt");
         BoardRaw boardRaw = null;
         try {
@@ -67,6 +76,7 @@ public class Main {
         MenuItem menuItemRestart = new MenuItem("Restart", "t");
         MenuItem menuItemEdit = new MenuItem("Edit", "e");
         MenuItem menuItemSave = new MenuItem("Save", "v");
+        MenuItem menuItemLoad = new MenuItem("Load", "o");
         MenuItem menuItemQuit = new MenuItem("Quit", "q");
         mainMenu.addItem(menuItemMove);
         mainMenu.addItem(menuItemRotateLeft);
@@ -86,6 +96,7 @@ public class Main {
                 new CmdRotateRight(gameState),
                 new CmdShoot(gameState),
                 new CmdRestart(gameState),
+                new CmdSave(new XmlGameSavesRepository(), gameState),
                 new CmdQuit(gameState)
         );
     }

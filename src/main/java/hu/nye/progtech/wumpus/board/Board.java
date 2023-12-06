@@ -1,18 +1,43 @@
 package hu.nye.progtech.wumpus.board;
 
+import java.io.Serializable;
+
 import hu.nye.progtech.wumpus.model.Cell;
 import hu.nye.progtech.wumpus.model.CellHero;
 import hu.nye.progtech.wumpus.model.CellType;
 import hu.nye.progtech.wumpus.model.Direction;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlType;
+
+
 
 /**
  * This class is the board of game.
  */
-public class Board {
-    private final int colSize;
-    private final int rowSize;
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "", propOrder = {
+        "cells",
+        "startCells"
+})
+@XmlRootElement(name = "Board")
+public class Board implements Serializable {
+    @XmlAttribute
+    private int colSize;
+    @XmlAttribute
+    private int rowSize;
     private Cell[][] cells;
     private final Cell[][] startCells;
+
+    public Board() {
+        this.colSize = 0;
+        this.rowSize = 0;
+        this.cells = null;
+        this.startCells = null;
+        //TODO Miért kell ez ide?
+    }
 
     public Board(int colSize, int rowSize, Cell[][] cells) {
         this.colSize = colSize;
@@ -25,9 +50,11 @@ public class Board {
         cells[col][row] = cell;
     }
 
+
     public int getColSize() {
         return colSize;
     }
+
 
     public int getRowSize() {
         return rowSize;
