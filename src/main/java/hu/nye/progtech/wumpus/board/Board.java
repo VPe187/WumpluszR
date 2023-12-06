@@ -23,6 +23,9 @@ import jakarta.xml.bind.annotation.XmlType;
 })
 @XmlRootElement(name = "Board")
 public class Board implements Serializable {
+    static final int WUMPUSES_EASY = 1;
+    static final int WUMPUSES_MEDIUM = 2;
+    static final int WUMPUSES_HARD = 3;
     @XmlAttribute
     private int colSize;
     @XmlAttribute
@@ -151,7 +154,7 @@ public class Board implements Serializable {
 
     public void reset() {
         cells = deepCopy(startCells);
-        hero.reset(cells);
+        hero.reset(cells, getWumpusCountByWorldSize(colSize));
     }
 
     private Cell[][] deepCopy(Cell[][] sourceCells) {
@@ -162,6 +165,23 @@ public class Board implements Serializable {
             }
         }
         return newCells;
+    }
+
+    /**
+     * Give arrow and wumpus number depends on board size.
+     *
+     * @param worldSize as int
+     * @return wumpus and arrow count
+     */
+    public int getWumpusCountByWorldSize(int worldSize) {
+        if (worldSize <= 8) {
+            return WUMPUSES_EASY;
+        }
+        if (worldSize <= 14) {
+            return WUMPUSES_MEDIUM;
+        } else {
+            return WUMPUSES_HARD;
+        }
     }
 
     @Override

@@ -42,10 +42,10 @@ public class BoardParser {
         Direction heroSight = getHeroSight();
         Cell[][] cells = parseRemainingRows(boardSize);
         cells[startCol - 1][startRow - 1].setType(CellType.HERO);
-        //Hero hero = new Hero(cells[startCol - 1][startRow - 1], 1, false, startCol - 1, startRow - 1, heroSight);
         Hero hero = new Hero(cells[startCol - 1][startRow - 1], 1, false, startCol - 1, startRow - 1, heroSight);
         Board board = new Board(boardSize, boardSize, cells);
         board.setHero(hero);
+        hero.setArrows(board.getWumpusCountByWorldSize(boardSize));
         return board;
     }
 

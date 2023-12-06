@@ -19,7 +19,8 @@ public enum Unicode {
     NORTH(0x2191),
     SOUTH(0x2193),
     WEST(0x2190),
-    EAST(0x2192);
+    EAST(0x2192),
+    ARROW(0x2B61);
     private final int value;
 
     Unicode(final int value) {

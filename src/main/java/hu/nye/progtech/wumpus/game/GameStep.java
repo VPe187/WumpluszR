@@ -10,18 +10,18 @@ import hu.nye.progtech.wumpus.ui.Message;
 /**
  * Indicate one move with Hero.
  */
-public class GameMove {
+public class GameStep {
 
-    public GameMove() {
+    public GameStep() {
     }
 
     /**
-     * Moving hero towerds its sight to the next field.
+     * Moving hero towards its sight to the next field.
      *
      * @param gameState as {@link GameState}
      * @param targetCell as {@link Cell}
      */
-    public static void move(GameState gameState, Cell targetCell) {
+    public void move(GameState gameState, Cell targetCell) {
         Board board = gameState.getCurrentBoard();
         gameState.setSteps(gameState.getSteps() + 1);
         if (targetCell.getType().equals(CellType.WUMPUS)) {
@@ -50,12 +50,12 @@ public class GameMove {
      *
      * @param gameState as {@link GameState}
      */
-    public static void shoot(GameState gameState) {
+    public void shoot(GameState gameState) {
         Board board = gameState.getCurrentBoard();
         Hero hero = board.getHero();
         if (hero.getArrows() > 0) {
             hero.loseArrow();
-            Cell targetCell = GameMove.shootEndCell(gameState, hero.getSight());
+            Cell targetCell = shootEndCell(gameState, hero.getSight());
             if (targetCell.getType().equals(CellType.WUMPUS)) {
                 board.getCells()[targetCell.getCol()][targetCell.getRow()] =
                         new Cell(targetCell.getCol(), targetCell.getRow(), CellType.EMPTY);
@@ -71,7 +71,7 @@ public class GameMove {
         }
     }
 
-    private static Cell shootEndCell(GameState gameState, Direction direction) {
+    private Cell shootEndCell(GameState gameState, Direction direction) {
         boolean hit = false;
         Cell targetCell = gameState.getCurrentBoard().getHeroCell();
         int col = targetCell.getCol();

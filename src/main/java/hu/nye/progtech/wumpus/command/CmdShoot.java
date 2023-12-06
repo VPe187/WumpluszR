@@ -1,7 +1,7 @@
 package hu.nye.progtech.wumpus.command;
 
-import hu.nye.progtech.wumpus.game.GameMove;
 import hu.nye.progtech.wumpus.game.GameState;
+import hu.nye.progtech.wumpus.game.GameStep;
 
 /**
  * Shoot command.
@@ -9,9 +9,11 @@ import hu.nye.progtech.wumpus.game.GameState;
 public class CmdShoot implements Command {
     private static final String COMMAND = "s";
     private final GameState gameState;
+    private final GameStep gameStep;
 
-    public CmdShoot(GameState gameState) {
+    public CmdShoot(GameState gameState, GameStep gameStep) {
         this.gameState = gameState;
+        this.gameStep = gameStep;
     }
 
     @Override
@@ -21,6 +23,6 @@ public class CmdShoot implements Command {
 
     @Override
     public void process(String input) {
-        GameMove.shoot(gameState);
+        gameStep.shoot(gameState);
     }
 }

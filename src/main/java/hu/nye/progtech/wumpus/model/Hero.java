@@ -117,8 +117,15 @@ public class Hero {
         return currentCell.getCol() == startCol && currentCell.getRow() == startRow && getHasGold();
     }
 
-    public void reset(Cell[][] cells) {
+    /**
+     * Reset hero.
+     *
+     * @param cells as {@link Cell}
+     * @param arrows as int
+     */
+    public void reset(Cell[][] cells, int arrows) {
         currentCell = cells[startCol][startRow];
         sight = startSight;
+        this.arrows = arrows;
     }
 }

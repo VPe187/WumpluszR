@@ -7,6 +7,7 @@ import hu.nye.progtech.wumpus.input.MenuItem;
 import hu.nye.progtech.wumpus.model.Cell;
 import hu.nye.progtech.wumpus.model.CellType;
 import hu.nye.progtech.wumpus.model.Color;
+import hu.nye.progtech.wumpus.model.Direction;
 import hu.nye.progtech.wumpus.model.Hero;
 import hu.nye.progtech.wumpus.model.PlayerVO;
 import hu.nye.progtech.wumpus.util.BoardUtil;
@@ -25,9 +26,11 @@ public class ConsolRenderer {
      *
      * @param gameState as {@link GameState}
      */
-    public static void render(GameState gameState) {
+    public static void render(GameState gameState, boolean withoutMenu) {
         renderBoard(gameState.getCurrentBoard());
-        menu(gameState.getCurrentMenu(), gameState.getCurrentPlayer());
+        if (!withoutMenu) {
+            menu(gameState.getCurrentMenu(), gameState.getCurrentPlayer(), gameState.getCurrentBoard().getHero().getArrows());
+        }
     }
 
     private static void renderBoard(Board board) {
@@ -44,11 +47,10 @@ public class ConsolRenderer {
                 separatorRow(boardSize);
             }
         }
-
     }
 
-    private static void menu(Menu menu, PlayerVO playerVO) {
-        menuHeader(menu.getWidth(), playerVO);
+    private static void menu(Menu menu, PlayerVO playerVO, int arrows) {
+        menuHeader(menu.getWidth(), playerVO, arrows);
         for (MenuItem menuItem : menu.getMenuList()) {
             print(Unicode.SPACE, Color.COLOR_BLACK);
             print(Unicode.SPACE, Color.COLOR_BLACK);
@@ -66,7 +68,7 @@ public class ConsolRenderer {
         printString("Your choiche: ", Color.COLOR_CYAN);
     }
 
-    private static void menuHeader(int menuWidth, PlayerVO playerVO) {
+    private static void menuHeader(int menuWidth, PlayerVO playerVO, int arrows) {
         print(Unicode.SPACE, Color.COLOR_BLACK);
         print(Unicode.SPACE, Color.COLOR_BLACK);
         printRepeat(menuWidth, Unicode.HORIZONTAL.toString(), Color.COLOR_WHITE);
@@ -75,8 +77,10 @@ public class ConsolRenderer {
         print(Unicode.SPACE, Color.COLOR_BLACK);
         printString(Unicode.HORIZONTAL + Unicode.HORIZONTAL.toString() + " " + menuHeaderText + " ", Color.COLOR_WHITE);
         printString(playerVO.getNickName() + " ", Color.COLOR_YELLOW);
-        printRepeat(menuWidth - menuHeaderText.length() - playerVO.getNickName().length() - 5,
+        printRepeat(arrows, Unicode.ARROW.toString() + " ", Color.COLOR_GREEN);
+        printRepeat(menuWidth - menuHeaderText.length() - playerVO.getNickName().length() - 5 - (arrows * 2),
                 Unicode.HORIZONTAL.toString(), Color.COLOR_WHITE);
+
         printLF();
     }
 

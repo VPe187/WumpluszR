@@ -11,9 +11,11 @@ public class GameController {
     private final GameState gameState;
     private final InputReader inputReader;
     private final InputHandler inputHandler;
+    private final GameStep gameStep;
 
-    public GameController(GameState gameState, InputReader inputReader, InputHandler inputHandler) {
+    public GameController(GameState gameState, GameStep gameStep, InputReader inputReader, InputHandler inputHandler) {
         this.gameState = gameState;
+        this.gameStep = gameStep;
         this.inputReader = inputReader;
         this.inputHandler = inputHandler;
     }
@@ -25,7 +27,7 @@ public class GameController {
         while (gameState.isRunning()) {
             String input = inputReader.readInput();
             inputHandler.handleInput(input);
-            ConsolRenderer.render(gameState);
+            ConsolRenderer.render(gameState, !gameState.isRunning());
         }
         System.exit(0);
     }

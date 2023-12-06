@@ -1,8 +1,8 @@
 package hu.nye.progtech.wumpus.command;
 
 import hu.nye.progtech.wumpus.board.Board;
-import hu.nye.progtech.wumpus.game.GameMove;
 import hu.nye.progtech.wumpus.game.GameState;
+import hu.nye.progtech.wumpus.game.GameStep;
 import hu.nye.progtech.wumpus.model.Cell;
 
 /**
@@ -11,9 +11,11 @@ import hu.nye.progtech.wumpus.model.Cell;
 public class CmdMove implements Command {
     private static final String COMMAND = "m";
     private final GameState gameState;
+    private final GameStep gameStep;
 
-    public CmdMove(GameState gameState) {
+    public CmdMove(GameState gameState, GameStep gameStep) {
         this.gameState = gameState;
+        this.gameStep = gameStep;
     }
 
     @Override
@@ -29,7 +31,7 @@ public class CmdMove implements Command {
             System.out.println("This move not possible because target cell contains wall.");
         } else {
             board.moveHeroTo(board.getHero(), targetCell);
-            GameMove.move(gameState, targetCell);
+            gameStep.move(gameState, targetCell);
         }
     }
 }

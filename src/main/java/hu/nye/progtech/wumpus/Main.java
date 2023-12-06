@@ -23,6 +23,7 @@ import hu.nye.progtech.wumpus.command.Command;
 import hu.nye.progtech.wumpus.exception.BoardParsingException;
 import hu.nye.progtech.wumpus.game.GameController;
 import hu.nye.progtech.wumpus.game.GameState;
+import hu.nye.progtech.wumpus.game.GameStep;
 import hu.nye.progtech.wumpus.input.InputHandler;
 import hu.nye.progtech.wumpus.input.InputReader;
 import hu.nye.progtech.wumpus.input.Menu;
@@ -60,10 +61,11 @@ public class Main {
         Menu mainMenu = createMainMenu(gameBoard.getColSize());
         PlayerVO playerVO = PlayerVO.builder().withNickName("VPe187").build();
         GameState gameState = new GameState(gameBoard, playerVO, mainMenu);
-        List<Command> commands = createCommands(gameState);
-        GameController wumpus = new GameController(gameState, new InputReader(new BufferedReader(new InputStreamReader(System.in))),
-                new InputHandler(commands));
-        ConsolRenderer.render(gameState);
+        GameStep gameStep = new GameStep();
+        List<Command> commands = createCommands(gameState, gameStep);
+        GameController wumpus = new GameController(gameState, gameStep,
+                new InputReader(new BufferedReader(new InputStreamReader(System.in))), new InputHandler(commands));
+        ConsolRenderer.render(gameState, false);
         wumpus.start();
     }
 
@@ -90,14 +92,14 @@ public class Main {
         return mainMenu;
     }
 
-    private static List<Command> createCommands(GameState gameState) {
+    private static List<Command> createCommands(GameState gameState, GameStep gameStep) {
         //GameSavesRepository storeRepository = new BinaryGameSavesRepository();
         GameSavesRepository storeRepository = new JdbcGameSavesRepository();
         return List.of(
-                new CmdMove(gameState),
+                new CmdMove(gameState, gameStep),
                 new CmdRotateLeft(gameState),
                 new CmdRotateRight(gameState),
-                new CmdShoot(gameState),
+                new CmdShoot(gameState, gameStep),
                 new CmdRestart(gameState),
                 new CmdSave(storeRepository, gameState),
                 new CmdLoad(storeRepository, gameState),
