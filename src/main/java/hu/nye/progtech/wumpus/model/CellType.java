@@ -23,6 +23,13 @@ public enum CellType {
         this.color = color;
     }
 
+    CellType(final String sign) {
+        CellType c = CellType.getByValue(sign);
+        this.sign = sign;
+        assert c != null;
+        this.color = c.getColor();
+    }
+
     /** Cell element by value.
      *
      * @param sign as String

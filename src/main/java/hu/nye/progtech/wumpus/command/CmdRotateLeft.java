@@ -20,6 +20,6 @@ public class CmdRotateLeft implements Command {
 
     @Override
     public void process(String input) {
-        gameState.getCurrentBoard().getHeroCell().rotateLeft();
+        gameState.getCurrentBoard().getHero().rotateLeft();
     }
 }

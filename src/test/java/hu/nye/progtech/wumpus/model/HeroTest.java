@@ -15,10 +15,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit test for {@link CellHero}
+ * Unit test for {@link Hero}
  */
 @ExtendWith(MockitoExtension.class)
-class CellHeroTest {
+class HeroTest {
     private static final Direction initialDirection = Direction.EAST;
     private static final Direction afterLeftDirection_1 = Direction.NORTH;
     private static final Direction afterLeftDirection_2 = Direction.WEST;
@@ -29,7 +29,7 @@ class CellHeroTest {
     private BoardParser boardParser;
     @Mock
     private GameState gameState;
-    private CellHero underTest;
+    private Hero underTest;
     private final List<String> rows = List.of(
             "6 B 5 E",
             "WWWWWW",
@@ -45,13 +45,13 @@ class CellHeroTest {
         boardRaw = new BoardRaw(rows);
         boardParser = new BoardParser(boardRaw);
         gameState = new GameState(boardParser.parseRawBoard(), null, null);
-        underTest = gameState.getCurrentBoard().getHeroCell();
+        underTest = gameState.getCurrentBoard().getHero();
     }
 
     @Test
     public void testInitialDirection() {
         // given
-        underTest = gameState.getCurrentBoard().getHeroCell();
+        underTest = gameState.getCurrentBoard().getHero();
         // when
         Direction result = underTest.getSight();
         // then
@@ -61,7 +61,7 @@ class CellHeroTest {
     @Test
     public void testHeroTurnRightOneTime() {
         // given
-        underTest = gameState.getCurrentBoard().getHeroCell();
+        underTest = gameState.getCurrentBoard().getHero();
         // when
         underTest.rotateLeft();
         Direction result = underTest.getSight();
@@ -72,7 +72,7 @@ class CellHeroTest {
     @Test
     public void testHeroTurnRightTwoTimes() {
         // given
-        underTest = gameState.getCurrentBoard().getHeroCell();
+        underTest = gameState.getCurrentBoard().getHero();
         // when
         underTest.rotateLeft();
         underTest.rotateLeft();
@@ -84,7 +84,7 @@ class CellHeroTest {
     @Test
     public void testHeroTurnRightThreeTimes() {
         // given
-        underTest = gameState.getCurrentBoard().getHeroCell();
+        underTest = gameState.getCurrentBoard().getHero();
         // when
         underTest.rotateLeft();
         underTest.rotateLeft();
@@ -97,7 +97,7 @@ class CellHeroTest {
     @Test
     public void testHeroTurnRightFourTimes() {
         // given
-        underTest = gameState.getCurrentBoard().getHeroCell();
+        underTest = gameState.getCurrentBoard().getHero();
         // when
         underTest.rotateLeft();
         underTest.rotateLeft();

@@ -12,7 +12,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "Cell")
 public class Cell implements Serializable {
 
-    private final CellType type;
+    private CellType type;
     private int col;
     private int row;
 
@@ -29,6 +29,10 @@ public class Cell implements Serializable {
     @XmlAttribute
     public CellType getType() {
         return type;
+    }
+
+    public void setType(CellType cellType) {
+        this.type = cellType;
     }
 
     @XmlAttribute

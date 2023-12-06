@@ -2,9 +2,9 @@ package hu.nye.progtech.wumpus.game;
 
 import hu.nye.progtech.wumpus.board.Board;
 import hu.nye.progtech.wumpus.model.Cell;
-import hu.nye.progtech.wumpus.model.CellHero;
 import hu.nye.progtech.wumpus.model.CellType;
 import hu.nye.progtech.wumpus.model.Direction;
+import hu.nye.progtech.wumpus.model.Hero;
 import hu.nye.progtech.wumpus.ui.Message;
 
 /**
@@ -25,24 +25,24 @@ public class GameMove {
         Board board = gameState.getCurrentBoard();
         gameState.setSteps(gameState.getSteps() + 1);
         if (targetCell.getType().equals(CellType.WUMPUS)) {
-            System.out.println("Your hero met a WUMPUS and died.");
-            board.getHeroCell().setDead(true);
+            Message.printMessage("Your hero met a WUMPUS and died.");
+            board.getHero().setDead(true);
             gameState.setRunning(false);
         } else if (targetCell.getType().equals(CellType.GOLD)) {
-            System.out.println("Your hero pick up the gold.");
-            board.getHeroCell().setHasGold(true);
+            Message.printMessage("Your hero pick up the gold.");
+            board.getHero().setHasGold(true);
         } else if (targetCell.getType().equals(CellType.PIT)) {
-            System.out.println("Your hero has fallen into the pit and lost 1 arrow.");
-            board.getHeroCell().loseArrow();
+            Message.printMessage("Your hero has fallen into the pit and lost 1 arrow.");
+            board.getHero().loseArrow();
         } else {
-            System.out.println("The hero has just moved to " + targetCell + " field.");
-            if (board.getHeroCell().checkGoal()) {
-                System.out.println("You got the gold and you got out. You win by " + gameState.getSteps() + " steps.");
+            Message.printMessage("The hero has just moved to " + targetCell + " field.");
+            if (board.getHero().checkGoal()) {
+                Message.printMessage("You got the gold and you got out. You win by " + gameState.getSteps() + " steps.");
                 gameState.setRunning(false);
             }
         }
-        board.moveHeroTo(board.getHeroCell(), targetCell);
-        System.out.println("Target: " + targetCell);
+        board.moveHeroTo(board.getHero(), targetCell);
+        Message.printMessage("Target: " + targetCell);
     }
 
     /**
@@ -52,21 +52,21 @@ public class GameMove {
      */
     public static void shoot(GameState gameState) {
         Board board = gameState.getCurrentBoard();
-        CellHero heroCell = board.getHeroCell();
-        if (heroCell.getArrows() > 0) {
-            heroCell.loseArrow();
-            Cell targetCell = GameMove.shootEndCell(gameState, heroCell.getSight());
+        Hero hero = board.getHero();
+        if (hero.getArrows() > 0) {
+            hero.loseArrow();
+            Cell targetCell = GameMove.shootEndCell(gameState, hero.getSight());
             if (targetCell.getType().equals(CellType.WUMPUS)) {
                 board.getCells()[targetCell.getCol()][targetCell.getRow()] =
                         new Cell(targetCell.getCol(), targetCell.getRow(), CellType.EMPTY);
                 Message.printMessage("It was a WUMPUS on %s. The Number of arrows left %d.",
-                        targetCell, heroCell.getArrows());
+                        targetCell, hero.getArrows());
             }
             if (targetCell.getType().equals(CellType.WALL)) {
                 Message.printMessage("It was a WALL. The arrow has fallen on the %s field. The Number of arrows left %d.",
-                        targetCell, heroCell.getArrows());
+                        targetCell, hero.getArrows());
             }
-        } else if (heroCell.getArrows() <= 0) {
+        } else if (hero.getArrows() <= 0) {
             Message.printMessage("Unfortunately, the hero has no more arrows.%n");
         }
     }

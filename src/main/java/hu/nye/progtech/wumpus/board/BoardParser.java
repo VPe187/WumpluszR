@@ -4,9 +4,9 @@ import java.util.regex.Pattern;
 
 import hu.nye.progtech.wumpus.exception.BoardParsingException;
 import hu.nye.progtech.wumpus.model.Cell;
-import hu.nye.progtech.wumpus.model.CellHero;
 import hu.nye.progtech.wumpus.model.CellType;
 import hu.nye.progtech.wumpus.model.Direction;
+import hu.nye.progtech.wumpus.model.Hero;
 import hu.nye.progtech.wumpus.util.BoardUtil;
 
 /**
@@ -41,8 +41,10 @@ public class BoardParser {
      */
     public Board parseRawBoard() throws BoardParsingException {
         parseFirstRow();
-        parseRemainingRows();
-        return new Board(boardSize, boardSize, cells);
+        Hero hero = parseRemainingRows();
+        Board board = new Board(boardSize, boardSize, cells);
+        board.setHero(hero);
+        return board;
     }
 
     private void parseFirstRow() throws BoardParsingException {
@@ -72,7 +74,7 @@ public class BoardParser {
         }
     }
 
-    private void parseRemainingRows() throws BoardParsingException {
+    private Hero parseRemainingRows() throws BoardParsingException {
         cells = new Cell[boardSize][boardSize];
         int i = 0;
         for (String row : boardRaw.getRemainingRows()) {
@@ -85,8 +87,7 @@ public class BoardParser {
             }
             i++;
         }
-        cells[startCol - 1][startRow - 1] =
-                new CellHero(startCol - 1, startRow - 1, 1, false,
-                        startCol - 1, startRow - 1, direction);
+        cells[startCol - 1][startRow - 1].setType(CellType.HERO);
+        return new Hero(cells[startCol - 1][startRow - 1], 1, false, startCol - 1, startRow - 1, direction);
     }
 }

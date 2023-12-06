@@ -5,8 +5,9 @@ import hu.nye.progtech.wumpus.game.GameState;
 import hu.nye.progtech.wumpus.input.Menu;
 import hu.nye.progtech.wumpus.input.MenuItem;
 import hu.nye.progtech.wumpus.model.Cell;
-import hu.nye.progtech.wumpus.model.CellHero;
+import hu.nye.progtech.wumpus.model.CellType;
 import hu.nye.progtech.wumpus.model.Color;
+import hu.nye.progtech.wumpus.model.Hero;
 import hu.nye.progtech.wumpus.model.PlayerVO;
 import hu.nye.progtech.wumpus.util.BoardUtil;
 
@@ -36,7 +37,7 @@ public class ConsolRenderer {
         firstRow(boardSize);
         for (int i = 0; i < boardSize; i++) {
             printString(String.valueOf(i + 1), Color.COLOR_BLUE);
-            internalRow(boardSize, cells, i);
+            internalRow(boardSize, cells, i, board.getHero());
             if (i == boardSize - 1) {
                 lastRow(boardSize);
             } else {
@@ -127,11 +128,11 @@ public class ConsolRenderer {
         printLF();
     }
 
-    private static void internalRow(int boardSize, Cell[][] cells, int row) {
+    private static void internalRow(int boardSize, Cell[][] cells, int row, Hero hero) {
         print(Unicode.SPACE, Color.COLOR_BLACK);
         print(Unicode.VERTICAL, Color.COLOR_WHITE);
         for (int i = 0; i < boardSize; i++) {
-            printCell(cells[i][row]);
+            printCell(cells[i][row], hero);
         }
         printLF();
     }
@@ -159,37 +160,37 @@ public class ConsolRenderer {
         System.out.print(asciiCode.getValue());
     }
 
-    private static void printCell(Cell cell) {
+    private static void printCell(Cell cell, Hero hero) {
         print(Unicode.SPACE, Color.COLOR_WHITE);
-        printCellValue(cell);
+        printCellValue(cell, hero);
         print(Unicode.SPACE, Color.COLOR_WHITE);
         print(Unicode.VERTICAL, Color.COLOR_WHITE);
     }
 
-    private static void printCellValue(Cell cell) {
+    private static void printCellValue(Cell cell, Hero hero) {
         System.out.print(Color.COLOR_RESET);
         System.out.print(cell.getType().getColor());
-        if (cell instanceof CellHero) {
-            if (((CellHero) cell).isDead()) {
+        if (cell.getType().equals(CellType.HERO)) {
+            if (hero.isDead()) {
                 printString("✝", Color.COLOR_RED);
-            } else if (((CellHero) cell).checkGoal()) {
+            } else if (hero.checkGoal()) {
                 printString("✓", Color.COLOR_GREEN);
             } else {
-                switch (((CellHero) cell).getSight()) {
+                switch (hero.getSight()) {
                     case NORTH: {
-                        print(Unicode.NORTH, (((CellHero) cell).getHasGold() ? Color.COLOR_YELLOW : Color.COLOR_GREEN));
+                        print(Unicode.NORTH, hero.getHasGold() ? Color.COLOR_YELLOW : Color.COLOR_GREEN);
                         break;
                     }
                     case SOUTH: {
-                        print(Unicode.SOUTH, (((CellHero) cell).getHasGold() ? Color.COLOR_YELLOW : Color.COLOR_GREEN));
+                        print(Unicode.SOUTH, hero.getHasGold() ? Color.COLOR_YELLOW : Color.COLOR_GREEN);
                         break;
                     }
                     case WEST: {
-                        print(Unicode.WEST, (((CellHero) cell).getHasGold() ? Color.COLOR_YELLOW : Color.COLOR_GREEN));
+                        print(Unicode.WEST, hero.getHasGold() ? Color.COLOR_YELLOW : Color.COLOR_GREEN);
                         break;
                     }
                     case EAST: {
-                        print(Unicode.EAST, (((CellHero) cell).getHasGold() ? Color.COLOR_YELLOW : Color.COLOR_GREEN));
+                        print(Unicode.EAST, hero.getHasGold() ? Color.COLOR_YELLOW : Color.COLOR_GREEN);
                         break;
                     }
                     default:

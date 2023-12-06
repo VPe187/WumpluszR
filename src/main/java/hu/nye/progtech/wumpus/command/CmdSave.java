@@ -2,6 +2,7 @@ package hu.nye.progtech.wumpus.command;
 
 import hu.nye.progtech.wumpus.game.GameState;
 import hu.nye.progtech.wumpus.persistence.repository.GameSavesRepository;
+import hu.nye.progtech.wumpus.ui.Message;
 
 /**
  * Save command.
@@ -24,6 +25,6 @@ public class CmdSave implements Command {
     @Override
     public void process(String input) {
         gameSavesRepository.save(gameState.getCurrentPlayer().getNickName(), gameState.getCurrentBoard());
-        System.out.println("Current game state saved.");
+        Message.printMessage("Current game state saved.");
     }
 }

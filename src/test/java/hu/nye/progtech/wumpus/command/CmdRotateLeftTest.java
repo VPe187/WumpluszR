@@ -44,7 +44,7 @@ class CmdRotateLeftTest {
         // given
         // when
         // then
-        assertEquals(initialDirection, gameState.getCurrentBoard().getHeroCell().getSight());
+        assertEquals(initialDirection, gameState.getCurrentBoard().getHero().getSight());
     }
 
     @Test

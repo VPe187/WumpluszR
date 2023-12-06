@@ -7,56 +7,46 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import hu.nye.progtech.wumpus.board.Board;
+import hu.nye.progtech.wumpus.ui.Message;
 
 /**
  * Save gamestate to binary file.
  */
 public class BinaryGameSavesRepository implements GameSavesRepository {
-    private String filePath = "state.bin";
+    private final String filePath = "state.bin";
 
     public BinaryGameSavesRepository() {
     }
 
     @Override
     public void save(String username, Board currentBoard) {
-        ObjectOutputStream oos = null;
+        ObjectOutputStream oos;
         long start = System.currentTimeMillis();
         try {
-            File f = new File(username + "_" + filePath);
-            FileOutputStream fos = new FileOutputStream(f);
+            File file = new File(username + "_" + filePath);
+            FileOutputStream fos = new FileOutputStream(file);
             oos = new ObjectOutputStream(fos);
             oos.writeObject(currentBoard);
-            System.out.println("File saved:" + f.getAbsolutePath() + " " + (System.currentTimeMillis() - start) + "ms");
-        } catch (Exception ecx) {
-            ecx.printStackTrace();
-        } finally {
-            try {
-                oos.close();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+            Message.printMessage("File saved:" + file.getAbsolutePath() + " (" + (System.currentTimeMillis() - start) + "ms)");
+        } catch (Exception e) {
+            Message.printMessage(e.getMessage());
         }
     }
 
     @Override
     public Board load(String username) {
         Board board = null;
-        ObjectInputStream ois = null;
+        ObjectInputStream ois;
         try {
-            File f = new File(username + "_" + filePath);
-            FileInputStream fis = new FileInputStream(f);
-            ois = new ObjectInputStream(fis);
-            board = (Board) ois.readObject();
-        } catch (Exception ecx) {
-            ecx.printStackTrace();
-        } finally {
-            try {
-                ois.close();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
+            File file = new File(username + "_" + filePath);
+            if (file.exists() && !file.isDirectory()) {
+                FileInputStream fis = new FileInputStream(file);
+                ois = new ObjectInputStream(fis);
+                board = (Board) ois.readObject();
             }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
         return board;
-
     }
 }

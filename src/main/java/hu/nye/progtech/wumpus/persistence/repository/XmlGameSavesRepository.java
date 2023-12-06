@@ -1,9 +1,9 @@
 package hu.nye.progtech.wumpus.persistence.repository;
 
 import java.io.File;
-import java.io.FileOutputStream;
 
 import hu.nye.progtech.wumpus.board.Board;
+import hu.nye.progtech.wumpus.ui.Message;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
@@ -15,7 +15,7 @@ import jakarta.xml.bind.Unmarshaller;
 public class XmlGameSavesRepository implements GameSavesRepository {
     private Marshaller marshaller;
     private Unmarshaller unmarshaller;
-    private String filePath = "state.xml";
+    private final String filePath = "state.xml";
 
     public XmlGameSavesRepository(Marshaller marshaller, Unmarshaller unmarshaller) {
         this.marshaller = marshaller;
@@ -24,13 +24,12 @@ public class XmlGameSavesRepository implements GameSavesRepository {
 
     public XmlGameSavesRepository() {
         try {
-            long start = System.currentTimeMillis();
             JAXBContext ctx = JAXBContext.newInstance(Board.class);
             marshaller = ctx.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             unmarshaller = ctx.createUnmarshaller();
-        } catch (Exception exc) {
-            exc.printStackTrace();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
 
     }
@@ -38,10 +37,11 @@ public class XmlGameSavesRepository implements GameSavesRepository {
     @Override
     public void save(String username, Board currentBoard) {
         try {
-            File f = new File(username + "_" + filePath);
+            File file = new File(username + "_" + filePath);
             long start = System.currentTimeMillis();
-            marshaller.marshal(currentBoard, f);
-            System.out.println("File saved:" + f.getAbsolutePath() + " " + (System.currentTimeMillis() - start) + "ms");
+            marshaller.marshal(currentBoard, file);
+
+            Message.printMessage("File saved:" + file.getAbsolutePath() + " (" + (System.currentTimeMillis() - start) + "ms)");
         } catch (JAXBException e) {
             throw new RuntimeException("Failed to save XML", e);
         }
@@ -51,7 +51,13 @@ public class XmlGameSavesRepository implements GameSavesRepository {
     public Board load(String username) {
         Board board = null;
         try {
-            board = (Board) unmarshaller.unmarshal(new File(username + "_" + filePath));
+            File file = new File(username + "_" + filePath);
+            if (file.exists() && !file.isDirectory()) {
+                board = (Board) unmarshaller.unmarshal(file);
+            } else {
+                Message.printMessage("Game state file not exists.");
+                return null;
+            }
         } catch (JAXBException e) {
             throw new RuntimeException("Failed to load XML", e);
         }

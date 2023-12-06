@@ -1,13 +1,15 @@
 package hu.nye.progtech.wumpus.command;
 
+import hu.nye.progtech.wumpus.board.Board;
 import hu.nye.progtech.wumpus.game.GameState;
 import hu.nye.progtech.wumpus.persistence.repository.GameSavesRepository;
+import hu.nye.progtech.wumpus.ui.Message;
 
 /**
  * Load command.
  */
 public class CmdLoad implements Command {
-    private static final String COMMAND = "v";
+    private static final String COMMAND = "o";
     private final GameState gameState;
     private final GameSavesRepository gameSavesRepository;
 
@@ -23,7 +25,10 @@ public class CmdLoad implements Command {
 
     @Override
     public void process(String input) {
-        gameSavesRepository.save(gameState.getCurrentPlayer().getNickName(), gameState.getCurrentBoard());
-        System.out.println("Current game state saved.");
+        Board loadedBoard = gameSavesRepository.load(gameState.getCurrentPlayer().getNickName());
+        if (loadedBoard != null) {
+            gameState.setCurrentBoard(loadedBoard);
+            Message.printMessage("Game state loaded.");
+        }
     }
 }

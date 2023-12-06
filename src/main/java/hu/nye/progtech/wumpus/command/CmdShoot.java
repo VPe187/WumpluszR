@@ -1,9 +1,7 @@
 package hu.nye.progtech.wumpus.command;
 
-import hu.nye.progtech.wumpus.board.Board;
 import hu.nye.progtech.wumpus.game.GameMove;
 import hu.nye.progtech.wumpus.game.GameState;
-import hu.nye.progtech.wumpus.model.CellHero;
 
 /**
  * Shoot command.

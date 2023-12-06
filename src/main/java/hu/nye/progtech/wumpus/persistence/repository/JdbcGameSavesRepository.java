@@ -33,8 +33,8 @@ public class JdbcGameSavesRepository implements GameSavesRepository {
             JAXBContext ctx = JAXBContext.newInstance(Board.class);
             marshaller = ctx.createMarshaller();
             unmarshaller = ctx.createUnmarshaller();
-        } catch (Exception exc) {
-            exc.printStackTrace();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -46,7 +46,7 @@ public class JdbcGameSavesRepository implements GameSavesRepository {
     public void save(String username, Board currentBoard) {
         Connection conn = null;
         PreparedStatement pstmt = null;
-        StringWriter writer = null;
+        StringWriter writer;
         try {
             delete(username);
             writer = new StringWriter();
@@ -78,10 +78,10 @@ public class JdbcGameSavesRepository implements GameSavesRepository {
     @Override
     public Board load(String username) {
         Board board = null;
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet resultSet = null;
-        StringReader reader = null;
+        Connection conn;
+        PreparedStatement pstmt;
+        ResultSet resultSet;
+        StringReader reader;
         try {
             conn = createConnection();
             pstmt = conn.prepareStatement(SELECT_STATEMENT);
@@ -94,67 +94,35 @@ public class JdbcGameSavesRepository implements GameSavesRepository {
                 reader.close();
             }
         } catch (Exception exception) {
-            exception.printStackTrace();
-        } finally {
-            try {
-                pstmt.close();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            try {
-                conn.close();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+            System.out.println(exception.getMessage());
         }
         return board;
     }
 
     private void delete(String username) {
-        Connection conn = null;
-        Statement pstmt = null;
+        Connection conn;
+        Statement pstmt;
         try {
             conn = createConnection();
             pstmt = conn.createStatement();
-            int rows = pstmt.executeUpdate("DELETE FROM game_saves WHERE username='" + username + "';");
+            //int rows = pstmt.executeUpdate("DELETE FROM game_saves WHERE username='" + username + "';");
+            int rows = pstmt.executeUpdate(DELETE_STATEMENT.replace("?", username));
             System.out.println(rows + " sor törölve.");
             pstmt.executeUpdate(TRUNCATE_STATEMENT);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-        } finally {
-            try {
-                pstmt.close();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            try {
-                conn.close();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
         }
     }
 
     private void createTable() {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
+        Connection conn;
+        PreparedStatement pstmt;
         try {
             conn = createConnection();
             pstmt = conn.prepareStatement(CREATE_TABLE_STATEMENT);
             pstmt.executeUpdate();
         } catch (Exception e) {
             System.out.println(e.getMessage());
-        } finally {
-            try {
-                pstmt.close();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            try {
-                conn.close();
-            } catch (Exception e) {
-                e.getMessage();
-            }
         }
     }
 }

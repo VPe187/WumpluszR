@@ -11,6 +11,7 @@ import hu.nye.progtech.wumpus.board.Board;
 import hu.nye.progtech.wumpus.board.BoardParser;
 import hu.nye.progtech.wumpus.board.BoardRaw;
 import hu.nye.progtech.wumpus.board.BufferedBoardReader;
+import hu.nye.progtech.wumpus.command.CmdLoad;
 import hu.nye.progtech.wumpus.command.CmdMove;
 import hu.nye.progtech.wumpus.command.CmdQuit;
 import hu.nye.progtech.wumpus.command.CmdRestart;
@@ -28,12 +29,10 @@ import hu.nye.progtech.wumpus.input.Menu;
 import hu.nye.progtech.wumpus.input.MenuItem;
 import hu.nye.progtech.wumpus.model.PlayerVO;
 import hu.nye.progtech.wumpus.persistence.repository.BinaryGameSavesRepository;
-import hu.nye.progtech.wumpus.persistence.repository.JdbcGameSavesRepository;
+import hu.nye.progtech.wumpus.persistence.repository.GameSavesRepository;
 import hu.nye.progtech.wumpus.persistence.repository.XmlGameSavesRepository;
 import hu.nye.progtech.wumpus.ui.ConsolRenderer;
-import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Marshaller;
 
 /**
  *  NYE Progtech Assigment - Wumplusz Refactored.
@@ -75,8 +74,8 @@ public class Main {
         MenuItem menuItemShoot = new MenuItem("Shoot", "s");
         MenuItem menuItemRestart = new MenuItem("Restart", "t");
         MenuItem menuItemEdit = new MenuItem("Edit", "e");
-        MenuItem menuItemSave = new MenuItem("Save", "v");
-        MenuItem menuItemLoad = new MenuItem("Load", "o");
+        MenuItem menuItemSave = new MenuItem("Save game state", "v");
+        MenuItem menuItemLoad = new MenuItem("Load game state", "o");
         MenuItem menuItemQuit = new MenuItem("Quit", "q");
         mainMenu.addItem(menuItemMove);
         mainMenu.addItem(menuItemRotateLeft);
@@ -85,18 +84,22 @@ public class Main {
         mainMenu.addItem(menuItemRestart);
         mainMenu.addItem(menuItemEdit);
         mainMenu.addItem(menuItemSave);
+        mainMenu.addItem(menuItemLoad);
         mainMenu.addItem(menuItemQuit);
         return mainMenu;
     }
 
     private static List<Command> createCommands(GameState gameState) {
+        //GameSavesRepository storeRepository = new BinaryGameSavesRepository();
+        GameSavesRepository storeRepository = new XmlGameSavesRepository();
         return List.of(
                 new CmdMove(gameState),
                 new CmdRotateLeft(gameState),
                 new CmdRotateRight(gameState),
                 new CmdShoot(gameState),
                 new CmdRestart(gameState),
-                new CmdSave(new XmlGameSavesRepository(), gameState),
+                new CmdSave(storeRepository, gameState),
+                new CmdLoad(storeRepository, gameState),
                 new CmdQuit(gameState)
         );
     }

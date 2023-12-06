@@ -10,7 +10,7 @@ import hu.nye.progtech.wumpus.ui.Message;
  * This class store actual user and played board.
  */
 public class GameState {
-    private final Board currentBoard;
+    private Board currentBoard;
     private final PlayerVO currentPlayerVO;
     private final Menu currentMenu;
     private boolean running;
@@ -26,6 +26,10 @@ public class GameState {
 
     public Board getCurrentBoard() {
         return currentBoard;
+    }
+
+    public void setCurrentBoard(Board currentBoard) {
+        this.currentBoard = currentBoard;
     }
 
     public PlayerVO getCurrentPlayer() {

@@ -3,16 +3,14 @@ package hu.nye.progtech.wumpus.board;
 import java.io.Serializable;
 
 import hu.nye.progtech.wumpus.model.Cell;
-import hu.nye.progtech.wumpus.model.CellHero;
 import hu.nye.progtech.wumpus.model.CellType;
 import hu.nye.progtech.wumpus.model.Direction;
+import hu.nye.progtech.wumpus.model.Hero;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
-
-
 
 /**
  * This class is the board of game.
@@ -20,7 +18,8 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
         "cells",
-        "startCells"
+        "startCells",
+        "hero"
 })
 @XmlRootElement(name = "Board")
 public class Board implements Serializable {
@@ -29,14 +28,10 @@ public class Board implements Serializable {
     @XmlAttribute
     private int rowSize;
     private Cell[][] cells;
-    private final Cell[][] startCells;
+    private Cell[][] startCells;
+    private Hero hero = null;
 
     public Board() {
-        this.colSize = 0;
-        this.rowSize = 0;
-        this.cells = null;
-        this.startCells = null;
-        //TODO Miért kell ez ide?
     }
 
     public Board(int colSize, int rowSize, Cell[][] cells) {
@@ -46,22 +41,48 @@ public class Board implements Serializable {
         this.startCells = deepCopy(cells);
     }
 
-    public void setOneCell(int col, int row, Cell cell) {
-        cells[col][row] = cell;
-    }
-
-
     public int getColSize() {
         return colSize;
     }
 
+    public void setColSize(int colSize) {
+        this.colSize = colSize;
+    }
 
     public int getRowSize() {
         return rowSize;
     }
 
+    public void setRowSize(int rowSize) {
+        this.rowSize = rowSize;
+    }
+
     public Cell[][] getCells() {
         return cells;
+    }
+
+    public void setCells(Cell[][] cells) {
+        this.cells = cells;
+    }
+
+    public Hero getHero() {
+        return hero;
+    }
+
+    public void setHero(Hero hero) {
+        this.hero = hero;
+    }
+
+    public Cell[][] getStartCells() {
+        return startCells;
+    }
+
+    public void setStartCells(Cell[][] startCells) {
+        this.startCells = startCells;
+    }
+
+    public void setOneCell(int col, int row, Cell cell) {
+        cells[col][row] = cell;
     }
 
     public Cell getCell(int col, int row) {
@@ -73,15 +94,8 @@ public class Board implements Serializable {
      *
      * @return {@link Cell}
      */
-    public CellHero getHeroCell() {
-        for (int i = 0; i < getRowSize(); i++) {
-            for (int j = 0; j < getColSize(); j++) {
-                if (cells[j][i] instanceof CellHero) {
-                    return (CellHero) cells[j][i];
-                }
-            }
-        }
-        return null;
+    public Cell getHeroCell() {
+        return this.hero.getCurrentCell();
     }
 
     /**
@@ -89,17 +103,16 @@ public class Board implements Serializable {
      * Return target cell as {@link Cell} depends on Hero can move to.
      */
     public Cell canHeroMove() {
-        CellHero heroCell = getHeroCell();
-        if (heroCell.getSight().equals(Direction.NORTH) && (heroCell.getRow() - 1) < 0) {
+        if (hero.getSight().equals(Direction.NORTH) && (hero.getCurrentCell().getRow() - 1) < 0) {
             return null;
         }
-        if (heroCell.getSight().equals(Direction.SOUTH) && (heroCell.getRow() + 1) > (getRowSize() - 1)) {
+        if (hero.getSight().equals(Direction.SOUTH) && (hero.getCurrentCell().getRow() + 1) > (getRowSize() - 1)) {
             return null;
         }
-        if (heroCell.getSight().equals(Direction.WEST) && (heroCell.getCol() - 1) < 0) {
+        if (hero.getSight().equals(Direction.WEST) && (hero.getCurrentCell().getCol() - 1) < 0) {
             return null;
         }
-        if (heroCell.getSight().equals(Direction.EAST) && (heroCell.getCol() + 1) > (getColSize() - 1)) {
+        if (hero.getSight().equals(Direction.EAST) && (hero.getCurrentCell().getCol() + 1) > (getColSize() - 1)) {
             return null;
         }
         Cell targetCell = getTargetCell();
@@ -111,30 +124,29 @@ public class Board implements Serializable {
     }
 
     private Cell getTargetCell() {
-        CellHero heroCell = getHeroCell();
-        return switch (heroCell.getSight()) {
-            case NORTH -> getCell(heroCell.getCol(), heroCell.getRow() - 1);
-            case SOUTH -> getCell(heroCell.getCol(), heroCell.getRow() + 1);
-            case WEST -> getCell(heroCell.getCol() - 1, heroCell.getRow());
-            case EAST -> getCell(heroCell.getCol() + 1, heroCell.getRow());
+        return switch (hero.getSight()) {
+            case NORTH -> getCell(hero.getCurrentCell().getCol(), hero.getCurrentCell().getRow() - 1);
+            case SOUTH -> getCell(hero.getCurrentCell().getCol(), hero.getCurrentCell().getRow() + 1);
+            case WEST -> getCell(hero.getCurrentCell().getCol() - 1, hero.getCurrentCell().getRow());
+            case EAST -> getCell(hero.getCurrentCell().getCol() + 1, hero.getCurrentCell().getRow());
         };
     }
 
     /**
      * Move Hero to next target cell.
      *
-     * @param heroCell as {@link CellHero}
+     * @param heroCell as {@link Hero}
      * @param targetCell as {@link Cell}
      */
-    public void moveHeroTo(CellHero heroCell, Cell targetCell) {
-        int heroCol = heroCell.getCol();
-        int heroRow = heroCell.getRow();
+    public void moveHeroTo(Hero heroCell, Cell targetCell) {
+        int heroCol = hero.getCurrentCell().getCol();
+        int heroRow = hero.getCurrentCell().getRow();
         int targetCol = targetCell.getCol();
         int targetRow = targetCell.getRow();
         setOneCell(heroCol, heroRow, new Cell(heroCol, heroRow, CellType.EMPTY));
-        heroCell.setCol(targetCol);
-        heroCell.setRow(targetRow);
-        setOneCell(targetCol, targetRow, heroCell);
+        hero.getCurrentCell().setCol(targetCol);
+        hero.getCurrentCell().setRow(targetRow);
+        setOneCell(targetCol, targetRow, hero.getCurrentCell());
     }
 
     public void reset() {
@@ -145,19 +157,7 @@ public class Board implements Serializable {
         Cell[][] newCells = new Cell[sourceCells.length][sourceCells.length];
         for (int i = 0; i < sourceCells.length; i++) {
             for (int j = 0; j < sourceCells.length; j++) {
-                if (sourceCells[j][i] instanceof CellHero) {
-                    newCells[j][i] = new CellHero(
-                            sourceCells[j][i].getCol(),
-                            sourceCells[j][i].getRow(),
-                            ((CellHero) sourceCells[j][i]).getArrows(),
-                            ((CellHero) sourceCells[j][i]).getHasGold(),
-                            ((CellHero) sourceCells[j][i]).getStartCol(),
-                            ((CellHero) sourceCells[j][i]).getStartRow(),
-                            ((CellHero) sourceCells[j][i]).getSight()
-                    );
-                } else {
-                    newCells[j][i] = new Cell(sourceCells[j][i].getCol(), sourceCells[j][i].getRow(), sourceCells[j][i].getType());
-                }
+                newCells[j][i] = new Cell(sourceCells[j][i].getCol(), sourceCells[j][i].getRow(), sourceCells[j][i].getType());
             }
         }
         return newCells;
