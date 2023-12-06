@@ -171,7 +171,7 @@ public class ConsolRenderer {
         System.out.print(Color.COLOR_RESET);
         System.out.print(cell.getType().getColor());
         if (cell.getType().equals(CellType.HERO)) {
-            if (hero.isDead()) {
+            if (hero.getDead()) {
                 printString("✝", Color.COLOR_RED);
             } else if (hero.checkGoal()) {
                 printString("✓", Color.COLOR_GREEN);

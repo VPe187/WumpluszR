@@ -20,8 +20,8 @@
         <item col="2" row="0" type="WALL"/>
         <item col="2" row="1" type="EMPTY"/>
         <item col="2" row="2" type="GOLD"/>
-        <item col="2" row="3" type="EMPTY"/>
-        <item col="2" row="4" type="HERO"/>
+        <item col="2" row="3" type="HERO"/>
+        <item col="2" row="4" type="EMPTY"/>
         <item col="2" row="5" type="WALL"/>
     </cells>
     <cells>
@@ -96,4 +96,13 @@
         <item col="5" row="4" type="WALL"/>
         <item col="5" row="5" type="WALL"/>
     </startCells>
+    <hero>
+        <arrows>1</arrows>
+        <hasGold>false</hasGold>
+        <dead>false</dead>
+        <sight>NORTH</sight>
+        <startCol>1</startCol>
+        <startRow>4</startRow>
+        <currentCell col="2" row="3" type="HERO"/>
+    </hero>
 </Board>

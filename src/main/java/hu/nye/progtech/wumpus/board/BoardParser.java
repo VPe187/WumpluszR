@@ -18,12 +18,7 @@ public class BoardParser {
     private static final String VALID_HERO_ROW_REGEX = "[0-9]";
     private static final String VALID_HERO_SIGHT_REGEX = "[NSEW]";
     private static final String VALID_ROW_LETTERS = "[WUGP_]+";
-    final BoardRaw boardRaw;
-    private int boardSize;
-    private int startCol;
-    private int startRow;
-    private Direction direction;
-    private Cell[][] cells;
+    private final BoardRaw boardRaw;
 
     /**
      * Constructor of BoardParser.
@@ -40,42 +35,73 @@ public class BoardParser {
      * @return board as {@link Board}
      */
     public Board parseRawBoard() throws BoardParsingException {
-        parseFirstRow();
-        Hero hero = parseRemainingRows();
+        checkHeader();
+        int boardSize = getBoardSize();
+        int startCol = getStartColumn();
+        int startRow = getStartRow();
+        Direction heroSight = getHeroSight();
+        Cell[][] cells = parseRemainingRows(boardSize);
+        cells[startCol - 1][startRow - 1].setType(CellType.HERO);
+        //Hero hero = new Hero(cells[startCol - 1][startRow - 1], 1, false, startCol - 1, startRow - 1, heroSight);
+        Hero hero = new Hero(cells[startCol - 1][startRow - 1], 1, false, startCol - 1, startRow - 1, heroSight);
         Board board = new Board(boardSize, boardSize, cells);
         board.setHero(hero);
         return board;
     }
 
-    private void parseFirstRow() throws BoardParsingException {
+    private void checkHeader() throws BoardParsingException {
         String[] row = boardRaw.getFirstRow().split(" ");
         if (row.length != 4) {
             throw new BoardParsingException("Header contains invalid number of characters!");
         }
+    }
+
+    private int getBoardSize() throws BoardParsingException {
+        int boardSize = 0;
+        String[] row = boardRaw.getFirstRow().split(" ");
         if (!Pattern.matches(VALID_SIZE_REGEX, row[0])) {
             throw new BoardParsingException("Header size value contains invalid character!");
         } else {
             boardSize = Integer.parseInt(row[0]);
         }
+        return boardSize;
+    }
+
+    private int getStartColumn() throws BoardParsingException {
+        int startCol = 0;
+        String[] row = boardRaw.getFirstRow().split(" ");
         if (!Pattern.matches(VALID_HERO_COL_REGEX, row[1])) {
             throw new BoardParsingException("Header hero column value contains invalid character!");
         } else {
             startCol = BoardUtil.integerFromLetter(row[1]);
         }
+        return startCol;
+    }
+
+    private int getStartRow() throws BoardParsingException {
+        int startRow = 0;
+        String[] row = boardRaw.getFirstRow().split(" ");
         if (!Pattern.matches(VALID_HERO_ROW_REGEX, row[2])) {
-            throw new BoardParsingException("Header hero column value contains invalid character!");
+            throw new BoardParsingException("Header hero row value contains invalid character!");
         } else {
             startRow = Integer.parseInt(row[2]);
         }
+        return startRow;
+    }
+
+    private Direction getHeroSight() throws BoardParsingException {
+        Direction direction;
+        String[] row = boardRaw.getFirstRow().split(" ");
         if (!Pattern.matches(VALID_HERO_SIGHT_REGEX, row[3])) {
             throw new BoardParsingException("Header hero sight value contains invalid character!");
         } else {
             direction = Direction.getByValue(row[3]);
         }
+        return direction;
     }
 
-    private Hero parseRemainingRows() throws BoardParsingException {
-        cells = new Cell[boardSize][boardSize];
+    private Cell[][] parseRemainingRows(int boardSize) throws BoardParsingException {
+        Cell[][] cells = new Cell[boardSize][boardSize];
         int i = 0;
         for (String row : boardRaw.getRemainingRows()) {
             if (!Pattern.matches(VALID_ROW_LETTERS, row)) {
@@ -87,7 +113,6 @@ public class BoardParser {
             }
             i++;
         }
-        cells[startCol - 1][startRow - 1].setType(CellType.HERO);
-        return new Hero(cells[startCol - 1][startRow - 1], 1, false, startCol - 1, startRow - 1, direction);
+        return cells;
     }
 }

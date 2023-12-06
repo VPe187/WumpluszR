@@ -21,7 +21,7 @@ public class JdbcGameSavesRepository implements GameSavesRepository {
     static final String CREATE_TABLE_STATEMENT =
             "CREATE TABLE IF NOT EXISTS game_saves (username VARCHAR(50), boardxml VARCHAR(4000))";
     static final String INSERT_STATEMENT = "INSERT INTO game_saves (username, boardxml) VALUES (?, ?);";
-    static final String DELETE_STATEMENT = "DELETE FROM game_saves WHERE username = ?;";
+    static final String DELETE_STATEMENT = "DELETE FROM game_saves WHERE username = '?';";
     static final String SELECT_STATEMENT = "SELECT * FROM game_saves WHERE username = ?;";
     static final String TRUNCATE_STATEMENT = "TRUNCATE TABLE game_saves;";
     private Marshaller marshaller = null;

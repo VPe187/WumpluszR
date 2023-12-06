@@ -30,6 +30,7 @@ import hu.nye.progtech.wumpus.input.MenuItem;
 import hu.nye.progtech.wumpus.model.PlayerVO;
 import hu.nye.progtech.wumpus.persistence.repository.BinaryGameSavesRepository;
 import hu.nye.progtech.wumpus.persistence.repository.GameSavesRepository;
+import hu.nye.progtech.wumpus.persistence.repository.JdbcGameSavesRepository;
 import hu.nye.progtech.wumpus.persistence.repository.XmlGameSavesRepository;
 import hu.nye.progtech.wumpus.ui.ConsolRenderer;
 import jakarta.xml.bind.JAXBException;
@@ -91,7 +92,7 @@ public class Main {
 
     private static List<Command> createCommands(GameState gameState) {
         //GameSavesRepository storeRepository = new BinaryGameSavesRepository();
-        GameSavesRepository storeRepository = new XmlGameSavesRepository();
+        GameSavesRepository storeRepository = new JdbcGameSavesRepository();
         return List.of(
                 new CmdMove(gameState),
                 new CmdRotateLeft(gameState),

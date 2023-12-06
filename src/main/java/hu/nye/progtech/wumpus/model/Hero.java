@@ -1,21 +1,33 @@
 package hu.nye.progtech.wumpus.model;
 
-import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlType;
 
 /**
  * Specified {@linkCell} type: Hero.
  */
 @XmlRootElement(name = "Hero")
-
+@XmlType(name = "", propOrder = {
+        "arrows",
+        "hasGold",
+        "dead",
+        "sight",
+        "startCol",
+        "startRow",
+        "currentCell"
+})
 public class Hero {
     private int arrows;
     private boolean hasGold;
     private boolean dead;
     private Direction sight;
+    private Direction startSight;
     private int startCol;
     private int startRow;
     private Cell currentCell;
+
+    public Hero() {
+    }
 
     public Hero(Cell currentCell, int arrows, boolean hasGold, int startCol, int startRow, Direction sight) {
         this.currentCell = currentCell;
@@ -24,10 +36,10 @@ public class Hero {
         this.startCol = startCol;
         this.startRow = startRow;
         this.sight = sight;
+        this.startSight = sight;
         dead = false;
     }
 
-    @XmlAttribute
     public int getArrows() {
         return arrows;
     }
@@ -36,7 +48,6 @@ public class Hero {
         this.arrows = arrows;
     }
 
-    @XmlAttribute
     public boolean getHasGold() {
         return hasGold;
     }
@@ -45,7 +56,6 @@ public class Hero {
         this.hasGold = hasGold;
     }
 
-    @XmlAttribute
     public int getStartCol() {
         return startCol;
     }
@@ -54,7 +64,6 @@ public class Hero {
         this.startCol = startCol;
     }
 
-    @XmlAttribute
     public int getStartRow() {
         return startRow;
     }
@@ -63,8 +72,7 @@ public class Hero {
         this.startRow = startRow;
     }
 
-    @XmlAttribute
-    public boolean isDead() {
+    public boolean getDead() {
         return dead;
     }
 
@@ -72,7 +80,6 @@ public class Hero {
         this.dead = dead;
     }
 
-    @XmlAttribute
     public Direction getSight() {
         return sight;
     }
@@ -81,7 +88,6 @@ public class Hero {
         this.sight = sight;
     }
 
-    @XmlAttribute
     public Cell getCurrentCell() {
         return currentCell;
     }
@@ -109,5 +115,10 @@ public class Hero {
 
     public boolean checkGoal() {
         return currentCell.getCol() == startCol && currentCell.getRow() == startRow && getHasGold();
+    }
+
+    public void reset(Cell[][] cells) {
+        currentCell = cells[startCol][startRow];
+        sight = startSight;
     }
 }

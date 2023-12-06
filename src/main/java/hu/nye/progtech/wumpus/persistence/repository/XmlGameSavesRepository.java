@@ -29,7 +29,8 @@ public class XmlGameSavesRepository implements GameSavesRepository {
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             unmarshaller = ctx.createUnmarshaller();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            //System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -40,7 +41,6 @@ public class XmlGameSavesRepository implements GameSavesRepository {
             File file = new File(username + "_" + filePath);
             long start = System.currentTimeMillis();
             marshaller.marshal(currentBoard, file);
-
             Message.printMessage("File saved:" + file.getAbsolutePath() + " (" + (System.currentTimeMillis() - start) + "ms)");
         } catch (JAXBException e) {
             throw new RuntimeException("Failed to save XML", e);

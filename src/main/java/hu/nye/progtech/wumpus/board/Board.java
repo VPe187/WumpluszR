@@ -29,7 +29,7 @@ public class Board implements Serializable {
     private int rowSize;
     private Cell[][] cells;
     private Cell[][] startCells;
-    private Hero hero = null;
+    private Hero hero;
 
     public Board() {
     }
@@ -150,7 +150,8 @@ public class Board implements Serializable {
     }
 
     public void reset() {
-        cells = startCells;
+        cells = deepCopy(startCells);
+        hero.reset(cells);
     }
 
     private Cell[][] deepCopy(Cell[][] sourceCells) {
