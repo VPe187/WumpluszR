@@ -45,7 +45,7 @@ public class BinaryGameSavesRepository implements GameSavesRepository {
                 board = (Board) ois.readObject();
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            Message.printMessage(e.getMessage());
         }
         return board;
     }

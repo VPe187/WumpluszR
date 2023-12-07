@@ -101,57 +101,6 @@ public class Board implements Serializable {
         return this.hero.getCurrentCell();
     }
 
-    /**
-     * Check the Hero can move its sight direction.
-     * Return target cell as {@link Cell} depends on Hero can move to.
-     */
-    public Cell canHeroMove() {
-        if (hero.getSight().equals(Direction.NORTH) && (hero.getCurrentCell().getRow() - 1) < 0) {
-            return null;
-        }
-        if (hero.getSight().equals(Direction.SOUTH) && (hero.getCurrentCell().getRow() + 1) > (getRowSize() - 1)) {
-            return null;
-        }
-        if (hero.getSight().equals(Direction.WEST) && (hero.getCurrentCell().getCol() - 1) < 0) {
-            return null;
-        }
-        if (hero.getSight().equals(Direction.EAST) && (hero.getCurrentCell().getCol() + 1) > (getColSize() - 1)) {
-            return null;
-        }
-        Cell targetCell = getTargetCell();
-        if (!targetCell.getType().equals(CellType.WALL)) {
-            return targetCell;
-        } else {
-            return null;
-        }
-    }
-
-    private Cell getTargetCell() {
-        return switch (hero.getSight()) {
-            case NORTH -> getCell(hero.getCurrentCell().getCol(), hero.getCurrentCell().getRow() - 1);
-            case SOUTH -> getCell(hero.getCurrentCell().getCol(), hero.getCurrentCell().getRow() + 1);
-            case WEST -> getCell(hero.getCurrentCell().getCol() - 1, hero.getCurrentCell().getRow());
-            case EAST -> getCell(hero.getCurrentCell().getCol() + 1, hero.getCurrentCell().getRow());
-        };
-    }
-
-    /**
-     * Move Hero to next target cell.
-     *
-     * @param heroCell as {@link Hero}
-     * @param targetCell as {@link Cell}
-     */
-    public void moveHeroTo(Hero heroCell, Cell targetCell) {
-        int heroCol = hero.getCurrentCell().getCol();
-        int heroRow = hero.getCurrentCell().getRow();
-        int targetCol = targetCell.getCol();
-        int targetRow = targetCell.getRow();
-        setOneCell(heroCol, heroRow, new Cell(heroCol, heroRow, CellType.EMPTY));
-        hero.getCurrentCell().setCol(targetCol);
-        hero.getCurrentCell().setRow(targetRow);
-        setOneCell(targetCol, targetRow, hero.getCurrentCell());
-    }
-
     public void reset() {
         cells = deepCopy(startCells);
         hero.reset(cells, getWumpusCountByWorldSize(colSize));

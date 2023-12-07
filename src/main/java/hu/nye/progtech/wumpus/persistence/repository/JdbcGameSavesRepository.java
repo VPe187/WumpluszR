@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import hu.nye.progtech.wumpus.board.Board;
+import hu.nye.progtech.wumpus.ui.Message;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
@@ -39,7 +40,8 @@ public class JdbcGameSavesRepository implements GameSavesRepository {
     }
 
     private Connection createConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:h2:file:/boardh2;AUTO_SERVER=TRUE", "sa", "");
+        return DriverManager.getConnection("jdbc:h2:~/test", "sa", "");
+        //return DriverManager.getConnection("jdbc:h2:file:~/wumpus;AUTO_SERVER=TRUE", "sa", "");
     }
 
     @Override
@@ -59,7 +61,7 @@ public class JdbcGameSavesRepository implements GameSavesRepository {
             pstmt.setString(2, boardXml);
             pstmt.executeUpdate();
         } catch (Exception exception) {
-            System.out.println(exception.getMessage());
+            Message.printMessage(exception.getMessage());
         } finally {
             try {
                 assert pstmt != null;
@@ -105,9 +107,8 @@ public class JdbcGameSavesRepository implements GameSavesRepository {
         try {
             conn = createConnection();
             pstmt = conn.createStatement();
-            //int rows = pstmt.executeUpdate("DELETE FROM game_saves WHERE username='" + username + "';");
             int rows = pstmt.executeUpdate(DELETE_STATEMENT.replace("?", username));
-            System.out.println(rows + " sor törölve.");
+            Message.printMessage(rows + " sor törölve.");
             pstmt.executeUpdate(TRUNCATE_STATEMENT);
         } catch (Exception e) {
             System.out.println(e.getMessage());

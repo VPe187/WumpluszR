@@ -8,11 +8,57 @@ import hu.nye.progtech.wumpus.model.Hero;
 import hu.nye.progtech.wumpus.ui.Message;
 
 /**
- * Indicate one move with Hero.
+ * Indicate game movement.
  */
 public class GameStep {
 
     public GameStep() {
+    }
+
+    /**
+     * Check the Hero can move its sight to next cell. If can, give a tartget cell, if can't, give null.
+     *
+     * @param gameState as {@link GameState}
+     * @return Cell or Null
+     */
+    public Cell canHeroMove(GameState gameState) {
+        Board board = gameState.getCurrentBoard();
+        Hero hero = board.getHero();
+        if (hero.getSight().equals(Direction.NORTH) && (hero.getCurrentCell().getRow() - 1) < 0) {
+            return null;
+        }
+        if (hero.getSight().equals(Direction.SOUTH) && (hero.getCurrentCell().getRow() + 1) > (board.getRowSize() - 1)) {
+            return null;
+        }
+        if (hero.getSight().equals(Direction.WEST) && (hero.getCurrentCell().getCol() - 1) < 0) {
+            return null;
+        }
+        if (hero.getSight().equals(Direction.EAST) && (hero.getCurrentCell().getCol() + 1) > (board.getColSize() - 1)) {
+            return null;
+        }
+        Cell targetCell = getTargetCell(gameState);
+        if (!targetCell.getType().equals(CellType.WALL)) {
+            return targetCell;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Give back hero movement target cell if exsits.
+     *
+     * @param gameState as {@link GameState}
+     * @return Cell which is a movement target.
+     */
+    public Cell getTargetCell(GameState gameState) {
+        Board board = gameState.getCurrentBoard();
+        Hero hero = gameState.getCurrentBoard().getHero();
+        return switch (hero.getSight()) {
+            case NORTH -> board.getCell(hero.getCurrentCell().getCol(), hero.getCurrentCell().getRow() - 1);
+            case SOUTH -> board.getCell(hero.getCurrentCell().getCol(), hero.getCurrentCell().getRow() + 1);
+            case WEST -> board.getCell(hero.getCurrentCell().getCol() - 1, hero.getCurrentCell().getRow());
+            case EAST -> board.getCell(hero.getCurrentCell().getCol() + 1, hero.getCurrentCell().getRow());
+        };
     }
 
     /**
@@ -41,8 +87,25 @@ public class GameStep {
                 gameState.setRunning(false);
             }
         }
-        board.moveHeroTo(board.getHero(), targetCell);
+        moveHeroTo(gameState, board.getHero(), targetCell);
         Message.printMessage("Target: " + targetCell);
+    }
+
+    /**
+     * Move Hero to next target cell.
+     *
+     * @param hero as {@link Hero}
+     * @param targetCell as {@link Cell}
+     */
+    public void moveHeroTo(GameState gameState, Hero hero, Cell targetCell) {
+        int heroCol = hero.getCurrentCell().getCol();
+        int heroRow = hero.getCurrentCell().getRow();
+        int targetCol = targetCell.getCol();
+        int targetRow = targetCell.getRow();
+        gameState.getCurrentBoard().setOneCell(heroCol, heroRow, new Cell(heroCol, heroRow, CellType.EMPTY));
+        hero.getCurrentCell().setCol(targetCol);
+        hero.getCurrentCell().setRow(targetRow);
+        gameState.getCurrentBoard().setOneCell(targetCol, targetRow, hero.getCurrentCell());
     }
 
     /**

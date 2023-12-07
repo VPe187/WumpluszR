@@ -26,11 +26,11 @@ public class CmdMove implements Command {
     @Override
     public void process(String input) {
         Board board = gameState.getCurrentBoard();
-        Cell targetCell = board.canHeroMove();
+        Cell targetCell = gameStep.canHeroMove(gameState);
         if (targetCell == null) {
             System.out.println("This move not possible because target cell contains wall.");
         } else {
-            board.moveHeroTo(board.getHero(), targetCell);
+            gameStep.moveHeroTo(gameState, board.getHero(), targetCell);
             gameStep.move(gameState, targetCell);
         }
     }
