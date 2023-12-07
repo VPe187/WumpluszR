@@ -4,6 +4,7 @@ import hu.nye.progtech.wumpus.board.BoardParser;
 import hu.nye.progtech.wumpus.board.BoardRaw;
 import hu.nye.progtech.wumpus.exception.BoardParsingException;
 import hu.nye.progtech.wumpus.game.GameState;
+import hu.nye.progtech.wumpus.game.GameStep;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,6 +30,8 @@ class HeroTest {
     private BoardParser boardParser;
     @Mock
     private GameState gameState;
+    @Mock
+    private GameStep gameStep;
     private Hero underTest;
     private final List<String> rows = List.of(
             "6 B 5 E",
@@ -40,11 +43,15 @@ class HeroTest {
             "WWWWWW"
     );
 
+    private final int WUMPUS_COL = 1;
+    private final int WUMPUS_ROW = 2;
+
     @BeforeEach
     public void setUp() throws BoardParsingException {
         boardRaw = new BoardRaw(rows);
         boardParser = new BoardParser(boardRaw);
         gameState = new GameState(boardParser.parseRawBoard(), null, null);
+        gameStep = new GameStep();
         underTest = gameState.getCurrentBoard().getHero();
     }
 
@@ -106,5 +113,22 @@ class HeroTest {
         Direction result = underTest.getSight();
         // then
         assertEquals(initialDirection, result);
+    }
+
+    @Test
+    public void testHeroDiedWhenMeetWumpus() {
+        // given
+        underTest = gameState.getCurrentBoard().getHero();
+        // when
+        underTest.rotateLeft();
+        Cell targetCell;
+        targetCell = gameStep.getTargetCell(gameState);
+        gameStep.move(gameState, targetCell);
+        targetCell = gameStep.getTargetCell(gameState);
+        gameStep.move(gameState, targetCell);
+        Boolean result = gameState.getCurrentBoard().getHero().getDead();
+        // then
+        assertEquals(true, result);
+
     }
 }
