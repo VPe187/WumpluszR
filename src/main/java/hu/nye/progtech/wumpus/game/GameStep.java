@@ -6,11 +6,14 @@ import hu.nye.progtech.wumpus.model.CellType;
 import hu.nye.progtech.wumpus.model.Direction;
 import hu.nye.progtech.wumpus.model.Hero;
 import hu.nye.progtech.wumpus.ui.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Indicate game movement.
  */
 public class GameStep {
+    private static final Logger LOGGER = LoggerFactory.getLogger(GameStep.class);
 
     public GameStep() {
     }
@@ -52,25 +55,31 @@ public class GameStep {
         switch (targetCell.getType()) {
             case WUMPUS:
                 Message.printMessage("Your hero met a WUMPUS and died.");
+                LOGGER.info("Your hero met a WUMPUS and died.");
                 board.getHero().setDead(true);
                 gameState.setRunning(false);
                 break;
             case GOLD:
                 Message.printMessage("Your hero pick up the gold.");
+                LOGGER.info("Your hero pick up the gold.");
                 board.getHero().setHasGold(true);
                 break;
             case PIT:
                 Message.printMessage("Your hero has fallen into the pit and lost 1 arrow.");
+                LOGGER.info("Your hero has fallen into the pit and lost 1 arrow.");
                 board.getHero().loseArrow();
                 break;
             default:
                 Message.printMessage("The hero has just moved to " + targetCell + " field.");
+                LOGGER.info("The hero has just moved to " + targetCell + " field.");
                 if (board.getHero().checkGoal()) {
                     Message.printMessage("You got the gold and you got out. You win by " + gameState.getSteps() + " steps.");
+                    LOGGER.info("You got the gold and you got out. You win by " + gameState.getSteps() + " steps.");
                     gameState.setRunning(false);
                 }
                 moveHeroTo(gameState, board.getHero(), targetCell);
                 Message.printMessage("Target: " + targetCell);
+                LOGGER.info("Target: " + targetCell);
                 break;
         }
     }
@@ -108,13 +117,16 @@ public class GameStep {
                         new Cell(targetCell.getCol(), targetCell.getRow(), CellType.EMPTY);
                 Message.printMessage("It was a WUMPUS on %s. The Number of arrows left %d.",
                         targetCell, hero.getArrows());
+                LOGGER.info("Hero shooted wumpus, arrows: -1");
             }
             if (targetCell.getType().equals(CellType.WALL)) {
                 Message.printMessage("It was a WALL. The arrow has fallen on the %s field. The Number of arrows left %d.",
                         targetCell, hero.getArrows());
+                LOGGER.info("Hero shooted a wall, arrows: -1");
             }
         } else if (hero.getArrows() <= 0) {
             Message.printMessage("Unfortunately, the hero has no more arrows.%n");
+            LOGGER.info("Hero tried use bow, but it has no arrow.");
         }
     }
 

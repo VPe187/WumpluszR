@@ -138,7 +138,7 @@ public class Board implements Serializable {
             for (int j = 0; j < colSize; j++) {
                 stringBuilder.append(cells[j][i].getType());
             }
-            stringBuilder.append(System.getProperty("line.separator"));
+            stringBuilder.append(System.lineSeparator());
         }
         return stringBuilder.toString();
     }

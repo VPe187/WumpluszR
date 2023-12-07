@@ -30,7 +30,7 @@ public class BoardRaw {
         StringBuilder stringBuilder = new StringBuilder();
         for (String row : rows) {
             stringBuilder.append(row);
-            stringBuilder.append(System.getProperty("line.separator"));
+            stringBuilder.append(System.lineSeparator());
         }
         return stringBuilder.toString();
     }
