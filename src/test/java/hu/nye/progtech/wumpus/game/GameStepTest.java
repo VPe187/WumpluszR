@@ -4,6 +4,7 @@ import hu.nye.progtech.wumpus.board.BoardParser;
 import hu.nye.progtech.wumpus.board.BoardRaw;
 import hu.nye.progtech.wumpus.exception.BoardParsingException;
 import hu.nye.progtech.wumpus.model.Cell;
+import hu.nye.progtech.wumpus.model.CellType;
 import hu.nye.progtech.wumpus.model.Direction;
 import hu.nye.progtech.wumpus.model.Hero;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +35,8 @@ class GameStepTest {
     );
     private final int startCol = 1;
     private final int startRow = 4;
+    private final int wumpusCol = 1;
+    private final int wumpusRow = 2;
 
     @BeforeEach
     public void setUp() throws BoardParsingException {
@@ -76,5 +79,17 @@ class GameStepTest {
         Cell underTest = gameStep.getTargetCell(gameState);
         // then
         assertNull(underTest);
+    }
+
+    @Test
+    public void testShoot() {
+        // given
+        Hero hero = gameState.getCurrentBoard().getHero();
+        // when
+        hero.setSight(Direction.NORTH);
+        gameStep.shoot(gameState);
+        CellType underTest = gameState.getCurrentBoard().getCell(wumpusCol, wumpusRow).getType();
+        // then
+        assertEquals(CellType.EMPTY, underTest);
     }
 }
