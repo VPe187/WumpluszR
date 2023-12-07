@@ -16,35 +16,6 @@ public class GameStep {
     }
 
     /**
-     * Check the Hero can move its sight to next cell. If can, give a tartget cell, if can't, give null.
-     *
-     * @param gameState as {@link GameState}
-     * @return Cell or Null
-     */
-    public Cell canHeroMove(GameState gameState) {
-        Board board = gameState.getCurrentBoard();
-        Hero hero = board.getHero();
-        if (hero.getSight().equals(Direction.NORTH) && (hero.getCurrentCell().getRow() - 1) < 0) {
-            return null;
-        }
-        if (hero.getSight().equals(Direction.SOUTH) && (hero.getCurrentCell().getRow() + 1) > (board.getRowSize() - 1)) {
-            return null;
-        }
-        if (hero.getSight().equals(Direction.WEST) && (hero.getCurrentCell().getCol() - 1) < 0) {
-            return null;
-        }
-        if (hero.getSight().equals(Direction.EAST) && (hero.getCurrentCell().getCol() + 1) > (board.getColSize() - 1)) {
-            return null;
-        }
-        Cell targetCell = getTargetCell(gameState);
-        if (!targetCell.getType().equals(CellType.WALL)) {
-            return targetCell;
-        } else {
-            return null;
-        }
-    }
-
-    /**
      * Give back hero movement target cell if exsits.
      *
      * @param gameState as {@link GameState}
@@ -53,12 +24,19 @@ public class GameStep {
     public Cell getTargetCell(GameState gameState) {
         Board board = gameState.getCurrentBoard();
         Hero hero = gameState.getCurrentBoard().getHero();
-        return switch (hero.getSight()) {
-            case NORTH -> board.getCell(hero.getCurrentCell().getCol(), hero.getCurrentCell().getRow() - 1);
-            case SOUTH -> board.getCell(hero.getCurrentCell().getCol(), hero.getCurrentCell().getRow() + 1);
-            case WEST -> board.getCell(hero.getCurrentCell().getCol() - 1, hero.getCurrentCell().getRow());
-            case EAST -> board.getCell(hero.getCurrentCell().getCol() + 1, hero.getCurrentCell().getRow());
-        };
+        if (hero.getSight().equals(Direction.NORTH) && (hero.getCurrentCell().getRow() - 1) > 0) {
+            return board.getCell(hero.getCurrentCell().getCol(), hero.getCurrentCell().getRow() - 1);
+        }
+        if (hero.getSight().equals(Direction.SOUTH) && (hero.getCurrentCell().getRow() + 1) < (board.getRowSize() - 1)) {
+            return board.getCell(hero.getCurrentCell().getCol(), hero.getCurrentCell().getRow() + 1);
+        }
+        if (hero.getSight().equals(Direction.WEST) && (hero.getCurrentCell().getCol() - 1) > 0) {
+            return board.getCell(hero.getCurrentCell().getCol() - 1, hero.getCurrentCell().getRow());
+        }
+        if (hero.getSight().equals(Direction.EAST) && (hero.getCurrentCell().getCol() + 1) < (board.getColSize() - 1)) {
+            return board.getCell(hero.getCurrentCell().getCol() + 1, hero.getCurrentCell().getRow());
+        }
+        return null;
     }
 
     /**
@@ -70,25 +48,31 @@ public class GameStep {
     public void move(GameState gameState, Cell targetCell) {
         Board board = gameState.getCurrentBoard();
         gameState.setSteps(gameState.getSteps() + 1);
-        if (targetCell.getType().equals(CellType.WUMPUS)) {
-            Message.printMessage("Your hero met a WUMPUS and died.");
-            board.getHero().setDead(true);
-            gameState.setRunning(false);
-        } else if (targetCell.getType().equals(CellType.GOLD)) {
-            Message.printMessage("Your hero pick up the gold.");
-            board.getHero().setHasGold(true);
-        } else if (targetCell.getType().equals(CellType.PIT)) {
-            Message.printMessage("Your hero has fallen into the pit and lost 1 arrow.");
-            board.getHero().loseArrow();
-        } else {
-            Message.printMessage("The hero has just moved to " + targetCell + " field.");
-            if (board.getHero().checkGoal()) {
-                Message.printMessage("You got the gold and you got out. You win by " + gameState.getSteps() + " steps.");
+
+        switch (targetCell.getType()) {
+            case WUMPUS:
+                Message.printMessage("Your hero met a WUMPUS and died.");
+                board.getHero().setDead(true);
                 gameState.setRunning(false);
-            }
+                break;
+            case GOLD:
+                Message.printMessage("Your hero pick up the gold.");
+                board.getHero().setHasGold(true);
+                break;
+            case PIT:
+                Message.printMessage("Your hero has fallen into the pit and lost 1 arrow.");
+                board.getHero().loseArrow();
+                break;
+            default:
+                Message.printMessage("The hero has just moved to " + targetCell + " field.");
+                if (board.getHero().checkGoal()) {
+                    Message.printMessage("You got the gold and you got out. You win by " + gameState.getSteps() + " steps.");
+                    gameState.setRunning(false);
+                }
+                moveHeroTo(gameState, board.getHero(), targetCell);
+                Message.printMessage("Target: " + targetCell);
+                break;
         }
-        moveHeroTo(gameState, board.getHero(), targetCell);
-        Message.printMessage("Target: " + targetCell);
     }
 
     /**

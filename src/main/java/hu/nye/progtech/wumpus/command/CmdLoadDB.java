@@ -5,7 +5,10 @@ import hu.nye.progtech.wumpus.game.GameState;
 import hu.nye.progtech.wumpus.persistence.repository.GameSavesRepository;
 import hu.nye.progtech.wumpus.ui.Message;
 
-public class CmdLoadDB implements Command{
+/**
+ * Command load form DB.
+ */
+public class CmdLoadDB implements Command {
     private static final String COMMAND = "b";
     private final GameState gameState;
     private final GameSavesRepository gameSavesRepository;

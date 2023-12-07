@@ -29,8 +29,7 @@ public class XmlGameSavesRepository implements GameSavesRepository {
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             unmarshaller = ctx.createUnmarshaller();
         } catch (Exception e) {
-            //System.out.println(e.getMessage());
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
 
     }
@@ -49,7 +48,7 @@ public class XmlGameSavesRepository implements GameSavesRepository {
 
     @Override
     public Board load(String username) {
-        Board board = null;
+        Board board;
         try {
             File file = new File(username + "_" + filePath);
             if (file.exists() && !file.isDirectory()) {

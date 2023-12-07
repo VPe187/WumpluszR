@@ -47,35 +47,34 @@ class GameStepTest {
     public void testMoveToNorthEmptyCell() {
         // given
         Hero hero = gameState.getCurrentBoard().getHero();
+        // when
         hero.setSight(Direction.NORTH);
-        Cell targetCell = gameStep.canHeroMove(gameState);
-        // when
-        gameStep.moveHeroTo(gameState, hero, targetCell);
+        Cell underTest = gameStep.getTargetCell(gameState);
         // then
-        assertEquals(startRow - 1, hero.getCurrentCell().getRow());
+        assertNotEquals(null, underTest);
     }
 
     @Test
-    public void testMoveToEastEmptyCell() {
+    public void testMovementToNorthEmptyCell() {
         // given
         Hero hero = gameState.getCurrentBoard().getHero();
-        hero.setSight(Direction.EAST);
-        Cell targetCell = gameStep.canHeroMove(gameState);
         // when
+        hero.setSight(Direction.NORTH);
+        Cell targetCell = gameStep.getTargetCell(gameState);
         gameStep.moveHeroTo(gameState, hero, targetCell);
-        // then
-        assertEquals(startCol + 1, hero.getCurrentCell().getCol());
+        Cell underTest = hero.getCurrentCell();
+        assertEquals(startRow - 1, underTest.getRow());
+        assertEquals(startCol, underTest.getCol());
     }
 
     @Test
-    public void testMoveToWallCell() {
+    public void testMoveToWestWallCell() {
         // given
         Hero hero = gameState.getCurrentBoard().getHero();
+        // when
         hero.setSight(Direction.WEST);
-        Cell targetCell = gameStep.canHeroMove(gameState);
-        // when
-        gameStep.moveHeroTo(gameState, hero, targetCell);
+        Cell underTest = gameStep.getTargetCell(gameState);
         // then
-        assertEquals(startCol, hero.getCurrentCell().getCol());
+        assertNull(underTest);
     }
 }

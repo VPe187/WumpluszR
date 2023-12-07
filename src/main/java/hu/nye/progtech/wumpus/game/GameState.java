@@ -2,9 +2,7 @@ package hu.nye.progtech.wumpus.game;
 
 import hu.nye.progtech.wumpus.board.Board;
 import hu.nye.progtech.wumpus.input.Menu;
-import hu.nye.progtech.wumpus.model.Cell;
 import hu.nye.progtech.wumpus.model.PlayerVO;
-import hu.nye.progtech.wumpus.ui.Message;
 
 /**
  * This class store actual user and played board.

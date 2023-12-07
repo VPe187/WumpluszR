@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Scanner;
 
 import hu.nye.progtech.wumpus.board.Board;
 import hu.nye.progtech.wumpus.board.BoardParser;
@@ -30,10 +31,7 @@ import hu.nye.progtech.wumpus.input.Menu;
 import hu.nye.progtech.wumpus.input.MenuItem;
 import hu.nye.progtech.wumpus.model.PlayerVO;
 import hu.nye.progtech.wumpus.persistence.configuration.RepositoryConfiguration;
-import hu.nye.progtech.wumpus.persistence.repository.BinaryGameSavesRepository;
 import hu.nye.progtech.wumpus.persistence.repository.GameSavesRepository;
-import hu.nye.progtech.wumpus.persistence.repository.JdbcGameSavesRepository;
-import hu.nye.progtech.wumpus.persistence.repository.XmlGameSavesRepository;
 import hu.nye.progtech.wumpus.ui.ConsolRenderer;
 
 /**
@@ -44,6 +42,14 @@ public class Main {
      * Application entry point.
      */
     public static void main(String[] args) throws BoardParsingException {
+
+        System.out.println("Kérem a felhasználó rövid nevét: ");
+        Scanner scanner = new Scanner(System.in);
+        String userNick = scanner.nextLine();
+        if (userNick.equalsIgnoreCase("")) {
+            userNick = "Unnamed";
+        }
+        PlayerVO playerVO = PlayerVO.builder().withNickName(userNick).build();
         InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("wumpuszinput.txt");
         BoardRaw boardRaw = null;
         try {
@@ -59,11 +65,10 @@ public class Main {
         BoardParser boardParser = new BoardParser(boardRaw);
         Board gameBoard = boardParser.parseRawBoard();
         Menu mainMenu = createMainMenu(gameBoard.getColSize());
-        PlayerVO playerVO = PlayerVO.builder().withNickName("VPe187").build();
         GameState gameState = new GameState(gameBoard, playerVO, mainMenu);
         GameStep gameStep = new GameStep();
         List<Command> commands = createCommands(gameState, gameStep);
-        GameController wumpus = new GameController(gameState, gameStep,
+        GameController wumpus = new GameController(gameState,
                 new InputReader(new BufferedReader(new InputStreamReader(System.in))), new InputHandler(commands));
         ConsolRenderer.render(gameState, false);
         wumpus.start();

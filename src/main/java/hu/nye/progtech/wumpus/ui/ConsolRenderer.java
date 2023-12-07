@@ -7,7 +7,6 @@ import hu.nye.progtech.wumpus.input.MenuItem;
 import hu.nye.progtech.wumpus.model.Cell;
 import hu.nye.progtech.wumpus.model.CellType;
 import hu.nye.progtech.wumpus.model.Color;
-import hu.nye.progtech.wumpus.model.Direction;
 import hu.nye.progtech.wumpus.model.Hero;
 import hu.nye.progtech.wumpus.model.PlayerVO;
 import hu.nye.progtech.wumpus.util.BoardUtil;
@@ -77,7 +76,7 @@ public class ConsolRenderer {
         print(Unicode.SPACE, Color.COLOR_BLACK);
         printString(Unicode.HORIZONTAL + Unicode.HORIZONTAL.toString() + " " + menuHeaderText + " ", Color.COLOR_WHITE);
         printString(playerVO.getNickName() + " ", Color.COLOR_YELLOW);
-        printRepeat(arrows, Unicode.ARROW.toString() + " ", Color.COLOR_GREEN);
+        printRepeat(arrows, Unicode.ARROW + " ", Color.COLOR_GREEN);
         printRepeat(menuWidth - menuHeaderText.length() - playerVO.getNickName().length() - 5 - (arrows * 2),
                 Unicode.HORIZONTAL.toString(), Color.COLOR_WHITE);
 

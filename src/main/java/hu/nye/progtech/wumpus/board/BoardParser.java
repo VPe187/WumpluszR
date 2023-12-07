@@ -57,7 +57,7 @@ public class BoardParser {
     }
 
     private int getBoardSize() throws BoardParsingException {
-        int boardSize = 0;
+        int boardSize;
         String[] row = boardRaw.getFirstRow().split(" ");
         if (!Pattern.matches(VALID_SIZE_REGEX, row[0])) {
             throw new BoardParsingException("Header size value contains invalid character!");
@@ -68,7 +68,7 @@ public class BoardParser {
     }
 
     private int getStartColumn() throws BoardParsingException {
-        int startCol = 0;
+        int startCol;
         String[] row = boardRaw.getFirstRow().split(" ");
         if (!Pattern.matches(VALID_HERO_COL_REGEX, row[1])) {
             throw new BoardParsingException("Header hero column value contains invalid character!");
@@ -79,7 +79,7 @@ public class BoardParser {
     }
 
     private int getStartRow() throws BoardParsingException {
-        int startRow = 0;
+        int startRow;
         String[] row = boardRaw.getFirstRow().split(" ");
         if (!Pattern.matches(VALID_HERO_ROW_REGEX, row[2])) {
             throw new BoardParsingException("Header hero row value contains invalid character!");

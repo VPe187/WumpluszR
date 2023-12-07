@@ -4,6 +4,7 @@ import hu.nye.progtech.wumpus.board.Board;
 import hu.nye.progtech.wumpus.game.GameState;
 import hu.nye.progtech.wumpus.game.GameStep;
 import hu.nye.progtech.wumpus.model.Cell;
+import hu.nye.progtech.wumpus.ui.Message;
 
 /**
  * Move command.
@@ -26,12 +27,12 @@ public class CmdMove implements Command {
     @Override
     public void process(String input) {
         Board board = gameState.getCurrentBoard();
-        Cell targetCell = gameStep.canHeroMove(gameState);
-        if (targetCell == null) {
-            System.out.println("This move not possible because target cell contains wall.");
-        } else {
+        Cell targetCell = gameStep.getTargetCell(gameState);
+        if (targetCell != null) {
             gameStep.moveHeroTo(gameState, board.getHero(), targetCell);
             gameStep.move(gameState, targetCell);
+        } else {
+            Message.printMessage("This move not possible because target cell contains wall.");
         }
     }
 }

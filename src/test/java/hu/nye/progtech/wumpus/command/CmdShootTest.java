@@ -8,22 +8,22 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit test for {@link CmdMove}
+ * Unit test for {@link CmdShoot}
  */
-class CmdMoveTest {
-    private static final String INPUT = "m";
-    private static final String INPUT_OTHER = "q";
-    private CmdMove underTest;
+class CmdShootTest {
+    private static final String INPUT = "s";
+    private static final String INPUT_OTHER = "o";
+    private CmdShoot underTest;
 
     @BeforeEach
     public void setUp() {
         GameState gameState = new GameState(null, null, null);
         GameStep gameStep = new GameStep();
-        underTest = new CmdMove(gameState, gameStep);
+        underTest = new CmdShoot(gameState, gameStep);
     }
 
     @Test
-    public void testIsCommandIsMove() {
+    public void testIsCommandIsShoot() {
         // given
         // when
         boolean result = underTest.validateCommand(INPUT);
@@ -32,7 +32,7 @@ class CmdMoveTest {
     }
 
     @Test
-    public void testIsCommandIsNotMove() {
+    public void testIsCommandIsNotShoot() {
         // given
         // when
         boolean result = underTest.validateCommand(INPUT_OTHER);

@@ -4,7 +4,10 @@ import hu.nye.progtech.wumpus.game.GameState;
 import hu.nye.progtech.wumpus.persistence.repository.GameSavesRepository;
 import hu.nye.progtech.wumpus.ui.Message;
 
-public class CmdSaveDB implements Command{
+/**
+ * Command save to DB.
+ */
+public class CmdSaveDB implements Command {
     private static final String COMMAND = "d";
     private final GameState gameState;
     private final GameSavesRepository gameSavesRepository;

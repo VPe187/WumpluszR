@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Board colSize="6" rowSize="6">
+    <cells>
+        <item col="0" row="0" type="WALL"/>
+        <item col="0" row="1" type="WALL"/>
+        <item col="0" row="2" type="WALL"/>
+        <item col="0" row="3" type="WALL"/>
+        <item col="0" row="4" type="WALL"/>
+        <item col="0" row="5" type="WALL"/>
+    </cells>
+    <cells>
+        <item col="1" row="0" type="WALL"/>
+        <item col="1" row="1" type="EMPTY"/>
+        <item col="1" row="2" type="WUMPUS"/>
+        <item col="1" row="3" type="EMPTY"/>
+        <item col="1" row="4" type="EMPTY"/>
+        <item col="1" row="5" type="WALL"/>
+    </cells>
+    <cells>
+        <item col="2" row="0" type="WALL"/>
+        <item col="2" row="1" type="EMPTY"/>
+        <item col="2" row="2" type="GOLD"/>
+        <item col="2" row="3" type="EMPTY"/>
+        <item col="2" row="4" type="HERO"/>
+        <item col="2" row="5" type="WALL"/>
+    </cells>
+    <cells>
+        <item col="3" row="0" type="WALL"/>
+        <item col="3" row="1" type="EMPTY"/>
+        <item col="3" row="2" type="PIT"/>
+        <item col="3" row="3" type="EMPTY"/>
+        <item col="3" row="4" type="PIT"/>
+        <item col="3" row="5" type="WALL"/>
+    </cells>
+    <cells>
+        <item col="4" row="0" type="WALL"/>
+        <item col="4" row="1" type="PIT"/>
+        <item col="4" row="2" type="EMPTY"/>
+        <item col="4" row="3" type="EMPTY"/>
+        <item col="4" row="4" type="EMPTY"/>
+        <item col="4" row="5" type="WALL"/>
+    </cells>
+    <cells>
+        <item col="5" row="0" type="WALL"/>
+        <item col="5" row="1" type="WALL"/>
+        <item col="5" row="2" type="WALL"/>
+        <item col="5" row="3" type="WALL"/>
+        <item col="5" row="4" type="WALL"/>
+        <item col="5" row="5" type="WALL"/>
+    </cells>
+    <startCells>
+        <item col="0" row="0" type="WALL"/>
+        <item col="0" row="1" type="WALL"/>
+        <item col="0" row="2" type="WALL"/>
+        <item col="0" row="3" type="WALL"/>
+        <item col="0" row="4" type="WALL"/>
+        <item col="0" row="5" type="WALL"/>
+    </startCells>
+    <startCells>
+        <item col="1" row="0" type="WALL"/>
+        <item col="1" row="1" type="EMPTY"/>
+        <item col="1" row="2" type="WUMPUS"/>
+        <item col="1" row="3" type="EMPTY"/>
+        <item col="1" row="4" type="HERO"/>
+        <item col="1" row="5" type="WALL"/>
+    </startCells>
+    <startCells>
+        <item col="2" row="0" type="WALL"/>
+        <item col="2" row="1" type="EMPTY"/>
+        <item col="2" row="2" type="GOLD"/>
+        <item col="2" row="3" type="EMPTY"/>
+        <item col="2" row="4" type="EMPTY"/>
+        <item col="2" row="5" type="WALL"/>
+    </startCells>
+    <startCells>
+        <item col="3" row="0" type="WALL"/>
+        <item col="3" row="1" type="EMPTY"/>
+        <item col="3" row="2" type="PIT"/>
+        <item col="3" row="3" type="EMPTY"/>
+        <item col="3" row="4" type="PIT"/>
+        <item col="3" row="5" type="WALL"/>
+    </startCells>
+    <startCells>
+        <item col="4" row="0" type="WALL"/>
+        <item col="4" row="1" type="PIT"/>
+        <item col="4" row="2" type="EMPTY"/>
+        <item col="4" row="3" type="EMPTY"/>
+        <item col="4" row="4" type="EMPTY"/>
+        <item col="4" row="5" type="WALL"/>
+    </startCells>
+    <startCells>
+        <item col="5" row="0" type="WALL"/>
+        <item col="5" row="1" type="WALL"/>
+        <item col="5" row="2" type="WALL"/>
+        <item col="5" row="3" type="WALL"/>
+        <item col="5" row="4" type="WALL"/>
+        <item col="5" row="5" type="WALL"/>
+    </startCells>
+    <hero>
+        <arrows>1</arrows>
+        <hasGold>false</hasGold>
+        <dead>false</dead>
+        <sight>EAST</sight>
+        <startCol>1</startCol>
+        <startRow>4</startRow>
+        <currentCell col="2" row="4" type="HERO"/>
+    </hero>
+</Board>

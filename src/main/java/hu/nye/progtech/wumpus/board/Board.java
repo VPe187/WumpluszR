@@ -3,8 +3,6 @@ package hu.nye.progtech.wumpus.board;
 import java.io.Serializable;
 
 import hu.nye.progtech.wumpus.model.Cell;
-import hu.nye.progtech.wumpus.model.CellType;
-import hu.nye.progtech.wumpus.model.Direction;
 import hu.nye.progtech.wumpus.model.Hero;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
