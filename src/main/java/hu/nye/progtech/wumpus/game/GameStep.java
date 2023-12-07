@@ -117,7 +117,7 @@ public class GameStep {
                         new Cell(targetCell.getCol(), targetCell.getRow(), CellType.EMPTY);
                 Message.printMessage("It was a WUMPUS on %s. The Number of arrows left %d.",
                         targetCell, hero.getArrows());
-                LOGGER.info("Hero shooted wumpus, arrows: -1");
+                LOGGER.info("Hero shooted wumpus. The number of arrows decreased.");
             }
             if (targetCell.getType().equals(CellType.WALL)) {
                 Message.printMessage("It was a WALL. The arrow has fallen on the %s field. The Number of arrows left %d.",

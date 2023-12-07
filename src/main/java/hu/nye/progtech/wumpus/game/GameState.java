@@ -10,7 +10,7 @@ import hu.nye.progtech.wumpus.model.PlayerVO;
 public class GameState {
     private Board currentBoard;
     private final PlayerVO currentPlayerVO;
-    private final Menu currentMenu;
+    private Menu currentMenu;
     private boolean running;
     private int steps;
 
@@ -52,5 +52,9 @@ public class GameState {
 
     public void setRunning(boolean running) {
         this.running = running;
+    }
+
+    public void setCurrentMenu(Menu currentMenu) {
+        this.currentMenu = currentMenu;
     }
 }

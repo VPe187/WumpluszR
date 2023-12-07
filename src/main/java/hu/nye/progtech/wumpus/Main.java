@@ -10,6 +10,7 @@ import hu.nye.progtech.wumpus.board.Board;
 import hu.nye.progtech.wumpus.board.BoardParser;
 import hu.nye.progtech.wumpus.board.BoardRaw;
 import hu.nye.progtech.wumpus.board.BufferedBoardReader;
+import hu.nye.progtech.wumpus.command.CmdEdit;
 import hu.nye.progtech.wumpus.command.CmdLoad;
 import hu.nye.progtech.wumpus.command.CmdLoadDB;
 import hu.nye.progtech.wumpus.command.CmdMove;
@@ -65,9 +66,10 @@ public class Main {
         BoardParser boardParser = new BoardParser(boardRaw);
         Board gameBoard = boardParser.parseRawBoard();
         Menu mainMenu = createMainMenu(gameBoard.getColSize());
+        Menu editMenu = createEditMenu(gameBoard.getColSize());
         GameState gameState = new GameState(gameBoard, playerVO, mainMenu);
         GameStep gameStep = new GameStep();
-        List<Command> commands = createCommands(gameState, gameStep);
+        List<Command> commands = createCommands(gameState, gameStep, editMenu);
         GameController wumpus = new GameController(gameState,
                 new InputReader(new BufferedReader(new InputStreamReader(System.in))), new InputHandler(commands));
         ConsolRenderer.render(gameState, false);
@@ -101,7 +103,22 @@ public class Main {
         return mainMenu;
     }
 
-    private static List<Command> createCommands(GameState gameState, GameStep gameStep) {
+    private static Menu createEditMenu(int boardSize) {
+        Menu editMenu = new Menu(boardSize * 3 + boardSize + 1);
+        MenuItem editMenuItemLoad = new MenuItem("Load from database", "b");
+        MenuItem editMenuItemSave = new MenuItem("Save to database", "d");
+        MenuItem editMenuItemAddWumpus = new MenuItem("Add Wumpus [colrow]", "u");
+        MenuItem editMenuItemAddPit = new MenuItem("Add Pit [colrow]", "p");
+        MenuItem editMenuItemQuit = new MenuItem("Return main menu", "q");
+        editMenu.addItem(editMenuItemLoad);
+        editMenu.addItem(editMenuItemSave);
+        editMenu.addItem(editMenuItemAddWumpus);
+        editMenu.addItem(editMenuItemAddPit);
+        editMenu.addItem(editMenuItemQuit);
+        return editMenu;
+    }
+
+    private static List<Command> createCommands(GameState gameState, GameStep gameStep, Menu editMenu) {
         RepositoryConfiguration repositoryConfiguration = new RepositoryConfiguration();
         GameSavesRepository storeBinRepository = repositoryConfiguration.createBinGameSavesRepository();
         GameSavesRepository storeDBRepository = repositoryConfiguration.createJdbcGameSavesRepository();
@@ -112,6 +129,7 @@ public class Main {
                 new CmdRotateRight(gameState),
                 new CmdShoot(gameState, gameStep),
                 new CmdRestart(gameState),
+                new CmdEdit(gameState, editMenu),
                 new CmdSave(storeXmlRepository, gameState),
                 new CmdLoad(storeXmlRepository, gameState),
                 new CmdSaveDB(storeDBRepository, gameState),
